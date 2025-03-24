@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "react-scripts": "5.0.1",
     "concurrently": "^9.1.2",
     "react-spotify-web-playback": "^0.14.7"
   },
