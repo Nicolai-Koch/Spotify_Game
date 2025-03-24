@@ -1,14 +1,45 @@
 {
+  "name": "spotify",
+  "version": "0.1.0",
+  "private": true,
   "dependencies": {
     "concurrently": "^9.1.2",
-    "react-spotify-web-playback": "^0.14.7"
+    "react-spotify-web-playback": "^0.14.7",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.2.0",
+    "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.8.3",
+    "bootstrap": "^5.3.3",
+    "react": "^19.0.0",
+    "react-bootstrap": "^2.10.9",
+    "react-dom": "^19.0.0",
+    "react-scripts": "5.0.1",
+    "react-spotify-web-playback": "^0.14.7",
+    "spotify-web-api-node": "^5.0.2",
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
     "start": "concurrently \"npm run start:frontend\" \"npm run start:backend\"",
     "start:frontend": "cd client && npm start",
     "start:backend": "cd server && npm run devStart"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
