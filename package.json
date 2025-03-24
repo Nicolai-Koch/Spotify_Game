@@ -1,5 +1,11 @@
 {
   "dependencies": {
+    "concurrently": "^9.1.2",
     "react-spotify-web-playback": "^0.14.7"
+  },
+  "scripts": {
+    "start": "concurrently \"npm run start:frontend\" \"npm run start:backend\"",
+    "start:frontend": "cd client && npm start",
+    "start:backend": "cd server && npm run devStart"
   }
 }
