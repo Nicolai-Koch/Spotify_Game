@@ -27,7 +27,7 @@ export default function Dashbord({ code }) {
     if (!playingTrack) return;
 
     axios
-      .get("https://spotify-game-1.onrender.com/lyrics", {
+      .get("http://localhost:3001/lyrics", {
         params: {
           track: playingTrack.title,
           artist: playingTrack.artist,
