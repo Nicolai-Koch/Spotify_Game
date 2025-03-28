@@ -10,13 +10,6 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const PORT = process.env.PORT || 3001; // Use Render's assigned port or default to 3001
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
-
-app.use(express.static("client/build"));
-
 app.post("/refresh", (req, res) => {
   const refreshToken = req.body.refreshToken;
   const spotifyApi = new SpotifyWebApi({
@@ -69,4 +62,4 @@ app.get("/lyrics", async (req, res) => {
   res.json({ lyrics });
 });
 
-//app.listen(3001);
+app.listen(3001);
