@@ -1,8 +1,8 @@
 {
   "dependencies": {
-    "concurrently": "^9.1.2",
     "axios": "^1.8.3",
     "bootstrap": "^5.3.3",
+    "firebase": "^11.5.0",
     "react": "^19.0.0",
     "react-bootstrap": "^2.10.9",
     "react-dom": "^19.0.0",
@@ -16,5 +16,8 @@
     "start": "concurrently \"npm run start:frontend\" \"npm run start:backend\"",
     "start:frontend": "cd client && npm start",
     "start:backend": "cd server && npm run devStart"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
   }
 }

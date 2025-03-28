@@ -6,9 +6,9 @@ export default function useAuth(code) {
   const [refreshToken, setRefreshToken] = useState();
   const [expiresIn, setExpiresIn] = useState();
 
-  console.log(refreshToken);
-
   useEffect(() => {
+    if (!code) return;
+
     axios
       .post("http://localhost:3001/login", {
         code,
@@ -17,7 +17,9 @@ export default function useAuth(code) {
         setAccessToken(res.data.accessToken);
         setRefreshToken(res.data.refreshToken);
         setExpiresIn(res.data.expiresIn);
-        window.history.pushState({}, null, "/");
+
+        // Replace the URL to remove the code parameter without refreshing the page
+        window.history.replaceState({}, null, "/");
       })
       .catch(() => {
         window.location = "/";
@@ -26,6 +28,7 @@ export default function useAuth(code) {
 
   useEffect(() => {
     if (!refreshToken || !expiresIn) return;
+
     const interval = setInterval(() => {
       axios
         .post("http://localhost:3001/refresh", {
@@ -38,9 +41,10 @@ export default function useAuth(code) {
         .catch(() => {
           window.location = "/";
         });
-    }, (expiresIn - 60) * 1000); // refresh token 1 minute before expiration
-    return () => clearInterval(interval); // clear timeout when component unmounts
-  }, [refreshToken, expiresIn]); //refresh token if expires
+    }, (expiresIn - 60) * 1000); // Refresh token 1 minute before expiration
+
+    return () => clearInterval(interval); // Clear interval on component unmount
+  }, [refreshToken, expiresIn]);
 
   return accessToken;
 }
