@@ -12,7 +12,7 @@ export default function Login() {
   const accessToken = useAuth(code); // Use the useAuth hook to get the access token
 
   const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
+  // const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null); // State to track the logged-in user
   const [isSignUp, setIsSignUp] = useState(true); // Toggle between Sign Up and Login

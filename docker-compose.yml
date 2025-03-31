@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=development
+      - REDIRECT_URI=http://localhost:3000
+      - CLIENT_ID=46bda7d191da42ff897f76371854b9a4
+      - CLIENT_SECRET=ce3225921c634b6b81f03322018f857a
+      - MONGODB_URI=mongodb://mongo:27017/mydatabase
+    command: ["npm", "start"]
