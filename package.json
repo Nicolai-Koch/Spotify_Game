@@ -18,6 +18,7 @@
     "start:backend": "cd server && npm run devStart"
   },
   "devDependencies": {
-    "concurrently": "^9.1.2"
+    "concurrently": "^9.1.2",
+    "nodemon": "^3.1.9"
   }
 }
