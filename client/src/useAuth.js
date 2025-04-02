@@ -10,7 +10,7 @@ export default function useAuth(code) {
     if (!code) return;
 
     axios
-      .post("http://165.232.91.70:3001/login", {
+      .post("http://localhost:3001/login", {
         code,
       })
       .then((res) => {
@@ -31,7 +31,7 @@ export default function useAuth(code) {
 
     const interval = setInterval(() => {
       axios
-        .post("http://165.232.91.70:3001/refresh", {
+        .post("http://localhost:3001/refresh", {
           refreshToken,
         })
         .then((res) => {

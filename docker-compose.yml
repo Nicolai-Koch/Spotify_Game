@@ -18,7 +18,7 @@ services:
       - "3001:3001"
     environment:
       - NODE_ENV=development
-      - REDIRECT_URI=http://165.232.91.70:3000
+      - REDIRECT_URI=http://localhost:3000
       - CLIENT_ID=2b42a9bc4cdb42b4ad90f51353e95c31
       - CLIENT_SECRET=15a09064e44e402b87a135699dd1b245
       - MONGODB_URI=mongodb://mongo:27017/mydatabase
