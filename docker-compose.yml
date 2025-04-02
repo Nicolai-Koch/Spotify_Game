@@ -19,7 +19,7 @@ services:
     environment:
       - NODE_ENV=development
       - REDIRECT_URI=http://165.232.91.70:3000
-      - CLIENT_ID=46bda7d191da42ff897f76371854b9a4
-      - CLIENT_SECRET=ce3225921c634b6b81f03322018f857a
+      - CLIENT_ID=2b42a9bc4cdb42b4ad90f51353e95c31
+      - CLIENT_SECRET=15a09064e44e402b87a135699dd1b245
       - MONGODB_URI=mongodb://mongo:27017/mydatabase
     command: ["npm", "start"]
