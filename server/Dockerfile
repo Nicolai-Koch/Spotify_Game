@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 3001
 
 # Define the command to run your app
-CMD ["npm", "run", "start:backend"]
+CMD ["npm", "run", "devStart"]
