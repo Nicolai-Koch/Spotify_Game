@@ -5,7 +5,7 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, on
 import useAuth from "./useAuth"; // Import the useAuth hook
 
 const AUTH_URL =
-  "https://accounts.spotify.com/authorize?client_id=46bda7d191da42ff897f76371854b9a4&response_type=code&redirect_uri=http://localhost:3000&scope=streaming%20user-read-private%20user-read-email%20user-library-read%20user-library-modify%20user-read-playback-state%20user-modify-playback-state";
+  "https://accounts.spotify.com/authorize?client_id=46bda7d191da42ff897f76371854b9a4&response_type=code&redirect_uri=http://165.232.91.70:3000&scope=streaming%20user-read-private%20user-read-email%20user-library-read%20user-library-modify%20user-read-playback-state%20user-modify-playback-state";
 
 export default function Login() {
   const code = new URLSearchParams(window.location.search).get("code"); // Get the authorization code from the URL
@@ -150,7 +150,7 @@ export default function Login() {
           onClick={handleSpotifyLogin}
           disabled={!user}
         >
-          Login with Spotify
+          Login with Spotify!!
         </button>
       </div>
     </Container>
