@@ -53,7 +53,6 @@ export default function Dashboard({ code }) {
   }
 
   useEffect(() => {
-<<<<<<< HEAD
     if (!playingTrack) return;
 
     axios
@@ -69,8 +68,6 @@ export default function Dashboard({ code }) {
   }, [playingTrack]);
 
   useEffect(() => {
-=======
->>>>>>> 8fcf7c9 (Playlist)
     if (!accessToken) return;
     spotifyApi.setAccessToken(accessToken);
   }, [accessToken]);

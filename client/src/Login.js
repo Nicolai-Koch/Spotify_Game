@@ -11,11 +11,7 @@ import {
 import useAuth from "./useAuth"; // Import the useAuth hook
 
 const AUTH_URL =
-<<<<<<< HEAD
   "https://accounts.spotify.com/authorize?client_id=2b42a9bc4cdb42b4ad90f51353e95c31&response_type=code&redirect_uri=http://localhost:3000&scope=streaming%20user-read-private%20user-read-email%20user-library-read%20user-library-modify%20user-read-playback-state%20user-modify-playback-state";
-=======
-  "https://accounts.spotify.com/authorize?client_id=2b42a9bc4cdb42b4ad90f51353e95c31&response_type=code&redirect_uri=http://localhost:3000&scope=streaming%20user-read-private%20user-read-email%20user-library-read%20user-library-modify%20user-read-playback-state%20user-modify-playback-state%20playlist-read-private%20playlist-read-collaborative%20playlist-modify-private%20playlist-modify-public";
->>>>>>> 8fcf7c9 (Playlist)
 
 export default function Login() {
   const code = new URLSearchParams(window.location.search).get("code"); // Get the authorization code from the URL
