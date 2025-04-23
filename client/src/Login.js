@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Container } from "react-bootstrap";
 import app from "./firebase-config"; // Import the initialized Firebase app
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut,
+} from "firebase/auth";
 import useAuth from "./useAuth"; // Import the useAuth hook
 
 const AUTH_URL =
@@ -32,7 +38,11 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       console.log("User signed up:", userCredential.user);
       alert("Sign-up successful!");
     } catch (error) {
@@ -45,7 +55,11 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       console.log("User logged in:", userCredential.user);
       alert("Login successful!");
     } catch (error) {
@@ -80,8 +94,13 @@ export default function Login() {
       {!user ? (
         <div className="w-100" style={{ maxWidth: "400px" }}>
           {/* Sign Up or Login Form */}
-          <form className="mb-4 shadow p-4 rounded bg-light" onSubmit={isSignUp ? handleSignUp : handleLogin}>
-            <h4 className="text-center mb-4">{isSignUp ? "Sign Up" : "Login"}</h4>
+          <form
+            className="mb-4 shadow p-4 rounded bg-light"
+            onSubmit={isSignUp ? handleSignUp : handleLogin}
+          >
+            <h4 className="text-center mb-4">
+              {isSignUp ? "Sign Up" : "Login"}
+            </h4>
             <input
               type="email"
               placeholder="Email"
@@ -135,8 +154,11 @@ export default function Login() {
           {/* User Profile */}
           <div className="shadow p-4 rounded bg-light text-center">
             <h3>Welcome, {user.email}</h3>
-            <p>You are now logged in! YAY</p>
-            <button className="btn btn-danger w-100 mt-3" onClick={handleLogOut}>
+            <p>You are now logged in!</p>
+            <button
+              className="btn btn-danger w-100 mt-3"
+              onClick={handleLogOut}
+            >
               Log Out
             </button>
           </div>
@@ -146,7 +168,9 @@ export default function Login() {
       {/* Login with Spotify */}
       <div className="w-100 mt-4" style={{ maxWidth: "400px" }}>
         <button
-          className={`btn btn-success btn-lg w-100 shadow ${!user ? "disabled" : ""}`}
+          className={`btn btn-success btn-lg w-100 shadow ${
+            !user ? "disabled" : ""
+          }`}
           onClick={handleSpotifyLogin}
           disabled={!user}
         >
