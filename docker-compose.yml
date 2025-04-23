@@ -20,7 +20,7 @@ services:
       context: ./client
       dockerfile: Dockerfile
     expose:
-      - "3000"
+      - "3000:3000"
     environment:
       - NODE_ENV=production
     restart: always
@@ -30,7 +30,7 @@ services:
       context: ./server
       dockerfile: Dockerfile
     expose:
-      - "3001"
+      - "3001:3001"
     environment:
       - NODE_ENV=production
       - REDIRECT_URI=https://spotifygame.dk
