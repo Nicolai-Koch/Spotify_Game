@@ -9,6 +9,7 @@ COPY package*.json ./
 
 # Install dependencies
 RUN npm install
+RUN npm install ws
 
 # Copy the rest of your application files
 COPY . .
