@@ -4,8 +4,11 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const lyricsFinder = require("lyrics-finder");
 const SpotifyWebApi = require("spotify-web-api-node");
-
+const http = require("http");
+const WebSocket = require("ws");
 const app = express();
+const server = http.createServer(app);
+const wss = new WebSocket.Server({ server, path: "/ws" });
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -62,6 +65,19 @@ app.get("/lyrics", async (req, res) => {
   res.json({ lyrics });
 });
 
-app.listen(3001, '0.0.0.0', () => {
-  console.log('Server is running on port 3001');
+wss.on("connection", (ws) => {
+  console.log("WebSocket client connected");
+
+  ws.on("message", (message) => {
+    console.log("Received:", message);
+    ws.send("You said: " + message);
+  });
+
+  ws.on("close", () => {
+    console.log("WebSocket client disconnected");
+  });
+});
+
+server.listen(3001, '0.0.0.0', () => {
+  console.log('Server + WebSocket is running on port 3001');
 });

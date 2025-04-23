@@ -27,7 +27,7 @@ export default function Dashbord({ code }) {
     if (!playingTrack) return;
 
     axios
-      .get("http://localhost:3001/lyrics", {
+      .get("http://165.232.91.70:3001/lyrics", {
         params: {
           track: playingTrack.title,
           artist: playingTrack.artist,

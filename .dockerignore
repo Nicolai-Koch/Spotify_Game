@@ -4,3 +4,6 @@ Dockerfile
 .git
 .gitignore
 .env
+node_modules
+build
+logs
