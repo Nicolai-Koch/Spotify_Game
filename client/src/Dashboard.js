@@ -42,6 +42,7 @@ export default function Dashboard({ code }) {
   const [userData, setUserData] = useState(null);
   const [loadingUser, setLoadingUser] = useState(true);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
+  const [lyrics, setLyrics] = useState(""); // Define the state for lyrics
 
   function chooseTrack(track) {
     const index = playlistTracks.findIndex((t) => t.uri === track.uri);
@@ -63,7 +64,11 @@ export default function Dashboard({ code }) {
         },
       })
       .then((res) => {
-        setLyrics(res.data.lyrics);
+        setLyrics(res.data.lyrics || "No lyrics found");
+      })
+      .catch((err) => {
+        console.error("Error fetching lyrics:", err);
+        setLyrics("Error fetching lyrics");
       });
   }, [playingTrack]);
 
