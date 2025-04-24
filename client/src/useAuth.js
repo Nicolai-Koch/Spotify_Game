@@ -10,15 +10,13 @@ export default function useAuth(code) {
     if (!code) return;
 
     axios
-      .post("https://spotifygame.dk/login", {
-        code,
-      })
+      .post("https://spotifygame.dk/login", { code })
       .then((res) => {
         setAccessToken(res.data.accessToken);
         setRefreshToken(res.data.refreshToken);
         setExpiresIn(res.data.expiresIn);
 
-        // Replace the URL to remove the code parameter without refreshing the page
+        // Remove the code from the URL to prevent re-triggering the login flow
         window.history.replaceState({}, null, "/");
       })
       .catch(() => {
@@ -31,9 +29,7 @@ export default function useAuth(code) {
 
     const interval = setInterval(() => {
       axios
-        .post("https://spotifygame.dk/refresh", {
-          refreshToken,
-        })
+        .post("https://spotifygame.dk/refresh", { refreshToken })
         .then((res) => {
           setAccessToken(res.data.accessToken);
           setExpiresIn(res.data.expiresIn);
