@@ -7,19 +7,25 @@ export const WebSocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    const ws = new WebSocket('wss://spotifygame.dk/ws');  // Adjust URL as needed
+    let ws = new WebSocket('wss://spotifygame.dk/ws');
     setSocket(ws);
 
     ws.onopen = () => {
       console.log("WebSocket connected");
     };
 
-    ws.onclose = () => {
-      console.log("WebSocket disconnected");
+    ws.onclose = (event) => {
+      console.log("WebSocket disconnected", event.reason);
+      // Attempt to reconnect after 5 seconds
+      setTimeout(() => {
+        console.log("Attempting to reconnect...");
+        ws = new WebSocket('wss://spotifygame.dk/ws');
+        setSocket(ws);
+      }, 5000);
     };
 
     ws.onerror = (error) => {
-      console.log("WebSocket error:", error);
+      console.error("WebSocket error:", error);
     };
 
     return () => {
