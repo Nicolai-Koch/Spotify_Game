@@ -31,7 +31,7 @@ export default function useAuth(code) {
         console.log("Expires In:", expiresIn);
 
         // Redirect to the root
-        window.location = "/";
+        //window.location = "/";
       });
   }, [code]);
 
