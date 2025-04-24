@@ -9,6 +9,8 @@ export default function useAuth(code) {
   useEffect(() => {
     if (!code) return;
 
+    console.log("Authorization code:", code);
+
     axios
       .post("https://spotifygame.dk/login", { code })
       .then((res) => {
@@ -19,7 +21,16 @@ export default function useAuth(code) {
         // Remove the code from the URL to prevent re-triggering the login flow
         window.history.replaceState({}, null, "/");
       })
-      .catch(() => {
+      .catch((err) => {
+        // Log the error and state before redirecting
+        console.error("Error during /login request:", err.response ? err.response.data : err.message);
+        console.log("State before redirecting:");
+        console.log("Code:", code);
+        console.log("Access Token:", accessToken);
+        console.log("Refresh Token:", refreshToken);
+        console.log("Expires In:", expiresIn);
+
+        // Redirect to the root
         window.location = "/";
       });
   }, [code]);
