@@ -1,4 +1,3 @@
-
 services:
   nginx:
     image: nginx:latest
@@ -32,9 +31,13 @@ services:
       - "3001:3001"
     environment:
       - NODE_ENV=production
-      - REDIRECT_URI=https://spotifygame.dk
-      - CLIENT_ID=2b42a9bc4cdb42b4ad90f51353e95c31
-      - CLIENT_SECRET=15a09064e44e402b87a135699dd1b245
+      - REDIRECT_URI=${REDIRECT_URI}
+      - CLIENT_ID=${CLIENT_ID}
+      - CLIENT_SECRET=${CLIENT_SECRET}
+      - HTTPS=${HTTPS}
+      - SSL_CRT_FILE=${SSL_CRT_FILE}
+      - SSL_KEY_FILE=${SSL_KEY_FILE}
+      - WDS_SOCKET_PORT=${WDS_SOCKET_PORT}
       - MONGODB_URI=mongodb://mongo:27017/mydatabase
     command: ["npm", "start"]
     restart: always
