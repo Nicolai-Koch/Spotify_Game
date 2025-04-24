@@ -38,6 +38,8 @@ app.post("/refresh", (req, res) => {
 
 app.post("/login", (req, res) => {
   const code = req.body.code;
+  console.log("Received code:", code); // Log the received code
+
   const spotifyApi = new SpotifyWebApi({
     redirectUri: process.env.REDIRECT_URI,
     clientId: process.env.CLIENT_ID,
@@ -47,6 +49,7 @@ app.post("/login", (req, res) => {
   spotifyApi
     .authorizationCodeGrant(code)
     .then((data) => {
+      console.log("Spotify API response:", data.body); // Log the response from Spotify
       res.json({
         accessToken: data.body.access_token,
         refreshToken: data.body.refresh_token,
@@ -54,6 +57,7 @@ app.post("/login", (req, res) => {
       });
     })
     .catch((err) => {
+      console.error("Error in /login endpoint:", err); // Log the error
       res.sendStatus(400);
     });
 });

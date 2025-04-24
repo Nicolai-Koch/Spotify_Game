@@ -35,6 +35,7 @@ export default function useAuth(code) {
           setExpiresIn(res.data.expiresIn);
         })
         .catch(() => {
+          console.error("Login error:", err);
           window.location = "/";
         });
     }, (expiresIn - 60) * 1000); // Refresh token 1 minute before expiration
