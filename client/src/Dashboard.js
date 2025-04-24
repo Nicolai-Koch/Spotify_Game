@@ -57,7 +57,7 @@ export default function Dashboard({ code }) {
     if (!playingTrack) return;
 
     axios
-      .get("http://165.232.91.70:3001/lyrics", {
+      .get("https://spotifygame.dk/lyrics", {
         params: {
           track: playingTrack.title,
           artist: playingTrack.artist,
