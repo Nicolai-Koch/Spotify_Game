@@ -42,7 +42,6 @@ export default function Dashboard({ code }) {
   const [userData, setUserData] = useState(null);
   const [loadingUser, setLoadingUser] = useState(true);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
-  const [lyrics, setLyrics] = useState(""); // Define the state for lyrics
 
   function chooseTrack(track) {
     const index = playlistTracks.findIndex((t) => t.uri === track.uri);

@@ -30,7 +30,7 @@ services:
     ports:
       - "3001:3001"
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=development
       - REDIRECT_URI=http://localhost:3000
       - CLIENT_ID=2b42a9bc4cdb42b4ad90f51353e95c31
       - CLIENT_SECRET=15a09064e44e402b87a135699dd1b245
@@ -40,18 +40,3 @@ services:
       - WDS_SOCKET_PORT=${WDS_SOCKET_PORT}
       - MONGODB_URI=mongodb://mongo:27017/mydatabase
     command: ["npm", "start"]
-    restart: always
-
-  mongo:
-    image: mongo
-    container_name: mongo_db
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo-data:/data/db
-      - ./mongo.conf:/etc/mongo/mongo.conf:ro
-    command: ["mongod", "--config", "/etc/mongo/mongo.conf"]
-    restart: always
-
-volumes:
-  mongo-data:

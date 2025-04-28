@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import SpotifyPlayer from "react-spotify-web-playback";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc, setDoc } from "firebase/firestore";
 import { db } from "./firebase-config";
 
 export default function User({ accessToken, trackUri, userId }) {
-  
   const [points, setPoints] = useState(50);
 
   useEffect(() => {
