@@ -51,11 +51,6 @@ export default function Dashboard({ code }) {
     setSearch("");
   }
 
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 0cb727d (fixed images and post to put)
   useEffect(() => {
     if (!accessToken) return;
     spotifyApi.setAccessToken(accessToken);
