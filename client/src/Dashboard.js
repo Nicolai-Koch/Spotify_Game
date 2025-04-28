@@ -4,7 +4,6 @@ import Player from "./Player"; // Spotify Player component
 import TrackSearchResult from "./TrackSearchResult"; // Component to display individual track
 import { Container, Form, Button, Row, Col } from "react-bootstrap";
 import SpotifyWebApi from "spotify-web-api-node"; // Spotify Web API wrapper
-import axios from "axios"; // For lyrics API call
 import { auth, db } from "./firebase-config"; // Firebase configuration
 import { onAuthStateChanged } from "firebase/auth"; // Firebase auth listener
 import User from "./User"; // Component for user logic
@@ -42,7 +41,6 @@ export default function Dashboard({ code }) {
   const [userData, setUserData] = useState(null);
   const [loadingUser, setLoadingUser] = useState(true);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
-  const [lyrics, setLyrics] = useState(""); // Define the state for lyrics
 
   function chooseTrack(track) {
     const index = playlistTracks.findIndex((t) => t.uri === track.uri);
@@ -52,8 +50,6 @@ export default function Dashboard({ code }) {
     setPlayingTrack(track);
     setSearch("");
   }
-
-
 
   useEffect(() => {
     if (!accessToken) return;
@@ -152,13 +148,35 @@ export default function Dashboard({ code }) {
 
     const songRef = doc(db, "RequestedSongs", songId);
     const userRef = doc(db, "Users", userId);
+    const votedUsers = (await getDoc(songRef)).data().votedUsers;
+
+    // Don't allow users to vote for their own songs
+    const songDoc = await getDoc(songRef);
+    if (songDoc.data().userId == userRef.id) {
+      alert("You are not allowed to vote for your own song");
+      return;
+    }
+
+    // Check if the user has already voted
+    // if (votedUsers && votedUsers.hasOwnProperty(userId)) {
+    //   alert("You has already voted!");
+    //   return;
+    // } else {
+    //   await updateDoc(songRef, {
+    //     [`votedUsers.${userId}`]: true,
+    //   });
+    // }
 
     await updateDoc(userRef, { points: increment(-5) });
     await updateDoc(songRef, { votes: increment(1) });
+    await updateDoc(songRef, { VotedUsers: userId });
 
     const updatedSong = await getDoc(songRef);
     if (updatedSong.data().votes >= 4) {
       await addDoc(collection(db, "Playlist"), updatedSong.data());
+      const requesterId = updatedSong.data().userId; // This is the user who requested the song
+      const requesterRef = doc(db, "Users", requesterId);
+      await updateDoc(requesterRef, { points: increment(15) });
       await deleteDoc(songRef);
     }
   }
