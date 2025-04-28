@@ -47,7 +47,7 @@ export default function useAuth(code) {
         })
         .catch(() => {
           console.error("Login error:", err);
-          window.location = "/";
+          //window.location = "/";
         });
     }, (expiresIn - 60) * 1000); // Refresh token 1 minute before expiration
 
