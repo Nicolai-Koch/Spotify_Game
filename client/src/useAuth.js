@@ -12,7 +12,7 @@ export default function useAuth(code) {
     console.log("Authorization code:", code);
 
     axios
-      .put("/login", { code })
+      .post("http://localhost:3001/login", { code })
       .then((res) => {
         setAccessToken(res.data.accessToken);
         setRefreshToken(res.data.refreshToken);
@@ -23,7 +23,7 @@ export default function useAuth(code) {
       })
       .catch((err) => {
         // Log the error and state before redirecting
-        console.error("Error during /login request:", err.response ? err.response.data : err.message);
+        
         console.log("State before redirecting:");
         console.log("Code:", code);
         console.log("Access Token:", accessToken);
@@ -40,7 +40,7 @@ export default function useAuth(code) {
 
     const interval = setInterval(() => {
       axios
-        .put("/refresh", { refreshToken })
+        .post("http://localhost:3001/refresh", { refreshToken })
         .then((res) => {
           setAccessToken(res.data.accessToken);
           setExpiresIn(res.data.expiresIn);

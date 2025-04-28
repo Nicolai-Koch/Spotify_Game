@@ -53,24 +53,7 @@ export default function Dashboard({ code }) {
     setSearch("");
   }
 
-  useEffect(() => {
-    if (!playingTrack) return;
 
-    axios
-      .get("http://localhost:3001/lyrics", {
-        params: {
-          track: playingTrack.title,
-          artist: playingTrack.artist,
-        },
-      })
-      .then((res) => {
-        setLyrics(res.data.lyrics || "No lyrics found");
-      })
-      .catch((err) => {
-        console.error("Error fetching lyrics:", err);
-        setLyrics("Error fetching lyrics");
-      });
-  }, [playingTrack]);
 
   useEffect(() => {
     if (!accessToken) return;
