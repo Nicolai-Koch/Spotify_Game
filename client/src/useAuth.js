@@ -12,7 +12,7 @@ export default function useAuth(code) {
     console.log("Authorization code:", code);
 
     axios
-      .post("https://spotifygame.dk/login", { code })
+      .post("/login", { code })
       .then((res) => {
         setAccessToken(res.data.accessToken);
         setRefreshToken(res.data.refreshToken);
@@ -40,7 +40,7 @@ export default function useAuth(code) {
 
     const interval = setInterval(() => {
       axios
-        .post("https://spotifygame.dk/refresh", { refreshToken })
+        .post("/refresh", { refreshToken })
         .then((res) => {
           setAccessToken(res.data.accessToken);
           setExpiresIn(res.data.expiresIn);
