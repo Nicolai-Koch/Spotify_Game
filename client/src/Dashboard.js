@@ -148,13 +148,35 @@ export default function Dashboard({ code }) {
 
     const songRef = doc(db, "RequestedSongs", songId);
     const userRef = doc(db, "Users", userId);
+    const votedUsers = (await getDoc(songRef)).data().votedUsers;
+
+    // Don't allow users to vote for their own songs
+    const songDoc = await getDoc(songRef);
+    if (songDoc.data().userId == userRef.id) {
+      alert("You are not allowed to vote for your own song");
+      return;
+    }
+
+    // Check if the user has already voted
+    // if (votedUsers && votedUsers.hasOwnProperty(userId)) {
+    //   alert("You has already voted!");
+    //   return;
+    // } else {
+    //   await updateDoc(songRef, {
+    //     [`votedUsers.${userId}`]: true,
+    //   });
+    // }
 
     await updateDoc(userRef, { points: increment(-5) });
     await updateDoc(songRef, { votes: increment(1) });
+    await updateDoc(songRef, { VotedUsers: userId });
 
     const updatedSong = await getDoc(songRef);
     if (updatedSong.data().votes >= 4) {
       await addDoc(collection(db, "Playlist"), updatedSong.data());
+      const requesterId = updatedSong.data().userId; // This is the user who requested the song
+      const requesterRef = doc(db, "Users", requesterId);
+      await updateDoc(requesterRef, { points: increment(15) });
       await deleteDoc(songRef);
     }
   }
