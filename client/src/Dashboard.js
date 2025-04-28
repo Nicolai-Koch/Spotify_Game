@@ -4,7 +4,6 @@ import Player from "./Player"; // Spotify Player component
 import TrackSearchResult from "./TrackSearchResult"; // Component to display individual track
 import { Container, Form, Button, Row, Col } from "react-bootstrap";
 import SpotifyWebApi from "spotify-web-api-node"; // Spotify Web API wrapper
-import axios from "axios"; // For lyrics API call
 import { auth, db } from "./firebase-config"; // Firebase configuration
 import { onAuthStateChanged } from "firebase/auth"; // Firebase auth listener
 import User from "./User"; // Component for user logic
@@ -52,8 +51,11 @@ export default function Dashboard({ code }) {
     setSearch("");
   }
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 0cb727d (fixed images and post to put)
   useEffect(() => {
     if (!accessToken) return;
     spotifyApi.setAccessToken(accessToken);
