@@ -36,7 +36,7 @@ app.post("/refresh", (req, res) => {
     });
 });
 
-app.post("/login", (req, res) => {
+app.put("/login", (req, res) => {
   const code = req.body.code;
   console.log("Received code:", code); // Log the received code
 

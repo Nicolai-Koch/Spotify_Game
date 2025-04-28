@@ -12,7 +12,7 @@ export default function useAuth(code) {
     console.log("Authorization code:", code);
 
     axios
-      .post("/login", { code })
+      .put("/login", { code })
       .then((res) => {
         setAccessToken(res.data.accessToken);
         setRefreshToken(res.data.refreshToken);
@@ -40,13 +40,12 @@ export default function useAuth(code) {
 
     const interval = setInterval(() => {
       axios
-        .post("/refresh", { refreshToken })
+        .put("/refresh", { refreshToken })
         .then((res) => {
           setAccessToken(res.data.accessToken);
           setExpiresIn(res.data.expiresIn);
         })
         .catch(() => {
-          console.error("Login error:", err);
           //window.location = "/";
         });
     }, (expiresIn - 60) * 1000); // Refresh token 1 minute before expiration
