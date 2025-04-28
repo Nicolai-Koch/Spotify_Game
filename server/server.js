@@ -5,10 +5,10 @@ const bodyParser = require("body-parser");
 const lyricsFinder = require("lyrics-finder");
 const SpotifyWebApi = require("spotify-web-api-node");
 const http = require("http");
-const WebSocket = require("ws");
+//const WebSocket = require("ws");
 const app = express();
 const server = http.createServer(app);
-const wss = new WebSocket.Server({ server, path: "/ws" });
+//const wss = new WebSocket.Server({ server, path: "/ws" });
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -66,23 +66,23 @@ app.post("/login", (req, res) => {
     })
     .catch((err) => {
       console.error("Error in /login endpoint:", err); // Log the error
-      res.sendStatus(400);
+      res.status(400).json({ error: "Failed to authenticate with Spotify" });
     });
 });
 
-wss.on("connection", (ws) => {
-  console.log("WebSocket client connected");
+//wss.on("connection", (ws) => {
+  //console.log("WebSocket client connected");
 
-  ws.on("message", (message) => {
-    console.log("Received:", message);
-    ws.send("You said: " + message);
-  });
+  //ws.on("message", (message) => {
+    //console.log("Received:", message);
+    //ws.send("You said: " + message);
+  //});
 
-  ws.on("close", () => {
-    console.log("WebSocket client disconnected");
-  });
-});
+  //ws.on("close", () => {
+    //console.log("WebSocket client disconnected");
+  //});
+//});
 
 server.listen(3001, '0.0.0.0', () => {
-  console.log('Server + WebSocket is running on port 3001');
+  console.log('Server is running on port 3001');
 });

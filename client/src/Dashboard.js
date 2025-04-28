@@ -246,7 +246,7 @@ export default function Dashboard({ code }) {
         {!search && (
           <Row className="mt-3 flex-grow-1" style={{ overflowY: "auto" }}>
             <Col>
-              <h4>Current Playlist</h4>
+              <h4>Current Playlist!!</h4>
               {playlistTracks.map((track) => (
                 <div
                   key={track.id}
