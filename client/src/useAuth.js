@@ -12,7 +12,7 @@ export default function useAuth(code) {
     console.log("Authorization code:", code);
 
     axios
-      .put("http://localhost:3001/login", {
+      .post("http://localhost:3001/login", {
         code,
       })
       .then((res) => {
@@ -45,7 +45,7 @@ export default function useAuth(code) {
 
     const interval = setInterval(() => {
       axios
-        .put("http://localhost:3001/refresh", {
+        .post("http://localhost:3001/refresh", {
           refreshToken,
         })
         .then((res) => {
