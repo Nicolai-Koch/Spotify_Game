@@ -22,16 +22,9 @@ export default function useAuth(code) {
         window.history.replaceState({}, null, "/");
       })
       .catch((err) => {
-        // Log the error and state before redirecting
-        
-        console.log("State before redirecting:");
-        console.log("Code:", code);
-        console.log("Access Token:", accessToken);
-        console.log("Refresh Token:", refreshToken);
-        console.log("Expires In:", expiresIn);
-
-        // Redirect to the root
-        //window.location = "/";
+        console.error("Error during login:", err.message);
+        alert("Failed to log in. Please try again.");
+        window.location = "/"; // Redirect to the root on failure
       });
   }, [code]);
 
@@ -45,8 +38,10 @@ export default function useAuth(code) {
           setAccessToken(res.data.accessToken);
           setExpiresIn(res.data.expiresIn);
         })
-        .catch(() => {
-          //window.location = "/";
+        .catch((err) => {
+          console.error("Error refreshing token:", err.message);
+          alert("Session expired. Please log in again.");
+          window.location = "/";
         });
     }, (expiresIn - 60) * 1000); // Refresh token 1 minute before expiration
 

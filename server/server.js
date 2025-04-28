@@ -66,7 +66,7 @@ app.post("/login", (req, res) => {
     })
     .catch((err) => {
       console.error("Error in /login endpoint:", err); // Log the error
-      res.sendStatus(400);
+      res.status(400).json({ error: "Failed to authenticate with Spotify" });
     });
 });
 
