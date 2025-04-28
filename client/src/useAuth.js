@@ -24,7 +24,7 @@ export default function useAuth(code) {
       .catch((err) => {
         console.error("Error during login:", err.message);
         alert("Failed to log in. Please try again.");
-        window.location = "/"; // Redirect to the root on failure
+        //window.location = "/"; // Redirect to the root on failure
       });
   }, [code]);
 
