@@ -1,17 +1,3 @@
-import React, { useState, useEffect } from "react";
-import { Container } from "react-bootstrap";
-import app from "./firebase-config";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  onAuthStateChanged,
-  signOut,
-} from "firebase/auth";
-
-const AUTH_URL =
-  "https://accounts.spotify.com/authorize?client_id=2b42a9bc4cdb42b4ad90f51353e95c31&response_type=code&redirect_uri=https://spotifygame.dk&scope=streaming%20user-read-private%20user-read-email%20user-library-read%20user-library-modify%20user-read-playback-state%20user-modify-playback-state";
-
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -56,24 +42,12 @@ export default function Login() {
     }
   };
 
-  const handleSpotifyLogin = () => {
-    window.location.href = AUTH_URL;
-  };
-
   return (
-    <Container
-      className="d-flex flex-column justify-content-center align-items-center"
-      style={{ minHeight: "100vh" }}
-    >
+    <Container className="d-flex flex-column justify-content-center align-items-center" style={{ minHeight: "100vh" }}>
       {!user ? (
         <div className="w-100" style={{ maxWidth: "400px" }}>
-          <form
-            className="mb-4 shadow p-4 rounded bg-light"
-            onSubmit={isSignUp ? handleSignUp : handleLogin}
-          >
-            <h4 className="text-center mb-4">
-              {isSignUp ? "Sign Up" : "Login"}
-            </h4>
+          <form className="mb-4 shadow p-4 rounded bg-light" onSubmit={isSignUp ? handleSignUp : handleLogin}>
+            <h4 className="text-center mb-4">{isSignUp ? "Sign Up" : "Login"}</h4>
             <input
               type="email"
               placeholder="Email"
@@ -99,22 +73,14 @@ export default function Login() {
             {isSignUp ? (
               <>
                 Already have an account?{" "}
-                <button
-                  className="btn btn-link p-0"
-                  onClick={() => setIsSignUp(false)}
-                  style={{ textDecoration: "none" }}
-                >
+                <button className="btn btn-link p-0" onClick={() => setIsSignUp(false)} style={{ textDecoration: "none" }}>
                   Log in
                 </button>
               </>
             ) : (
               <>
                 Don't have an account?{" "}
-                <button
-                  className="btn btn-link p-0"
-                  onClick={() => setIsSignUp(true)}
-                  style={{ textDecoration: "none" }}
-                >
+                <button className="btn btn-link p-0" onClick={() => setIsSignUp(true)} style={{ textDecoration: "none" }}>
                   Sign up
                 </button>
               </>
@@ -132,20 +98,6 @@ export default function Login() {
           </div>
         </div>
       )}
-
-      {/* Login with Spotify */}
-      <div className="w-100 mt-4" style={{ maxWidth: "400px" }}>
-        <button
-          className="btn btn-success btn-lg w-100 shadow"
-          onClick={handleSpotifyLogin}
-          disabled={!user}
-        >
-          Login with Spotify
-        </button>
-      </div>
     </Container>
   );
 }
-
-// This code is a React component that provides a login and sign-up form for users. It uses Firebase Authentication to manage user accounts and allows users to log in with their Spotify account. The component handles both sign-up and login processes, displays appropriate messages, and provides a button to log out. The Spotify login button is disabled until the user is logged in with Firebase.
-// The component uses React hooks to manage state and side effects, such as checking the authentication state and handling form submissions. It also includes error handling for sign-up and login attempts, displaying alerts for success or failure. The layout is styled using Bootstrap classes for a clean and responsive design.

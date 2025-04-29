@@ -28,10 +28,8 @@ const spotifyApi = new SpotifyWebApi({
   clientId: "2b42a9bc4cdb42b4ad90f51353e95c31",
 });
 
-// ... all your existing imports remain the same
-
 export default function Dashboard({ code }) {
-  const accessToken = useAuth(code);
+  const accessToken = useAuth(code); // Now using accessToken from useAuth hook
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [playingTrack, setPlayingTrack] = useState(null);
@@ -42,6 +40,7 @@ export default function Dashboard({ code }) {
   const [loadingUser, setLoadingUser] = useState(true);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
 
+  // Function to choose a track from the playlist
   function chooseTrack(track) {
     const index = playlistTracks.findIndex((t) => t.uri === track.uri);
     if (index !== -1) {
@@ -51,11 +50,13 @@ export default function Dashboard({ code }) {
     setSearch("");
   }
 
+  // Set the Spotify API access token once it's available
   useEffect(() => {
     if (!accessToken) return;
     spotifyApi.setAccessToken(accessToken);
   }, [accessToken]);
 
+  // Firebase auth state listener
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -80,6 +81,7 @@ export default function Dashboard({ code }) {
     return () => unsubscribeAuth();
   }, []);
 
+  // Fetch requested songs from Firestore
   useEffect(() => {
     const q = query(
       collection(db, "RequestedSongs"),
@@ -94,6 +96,7 @@ export default function Dashboard({ code }) {
     return () => unsubscribe();
   }, []);
 
+  // Fetch playlist tracks from Firestore
   useEffect(() => {
     const q = query(collection(db, "Playlist"), orderBy("timestamp", "asc"));
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -106,6 +109,7 @@ export default function Dashboard({ code }) {
     return () => unsubscribe();
   }, []);
 
+  // Update the currently playing track when the track index changes
   useEffect(() => {
     if (
       playlistTracks.length > 0 &&
@@ -115,6 +119,7 @@ export default function Dashboard({ code }) {
     }
   }, [currentTrackIndex, playlistTracks]);
 
+  // Handle searching for tracks
   useEffect(() => {
     if (!search) return setSearchResults([]);
     if (!accessToken) return;
@@ -140,47 +145,7 @@ export default function Dashboard({ code }) {
     return () => (cancel = true);
   }, [search, accessToken]);
 
-  async function voteForSong(songId) {
-    if (!userData || userData.points < 5) {
-      alert("Not enough points to vote");
-      return;
-    }
-
-    const songRef = doc(db, "RequestedSongs", songId);
-    const userRef = doc(db, "Users", userId);
-    const votedUsers = (await getDoc(songRef)).data().votedUsers;
-
-    // Don't allow users to vote for their own songs
-    const songDoc = await getDoc(songRef);
-    if (songDoc.data().userId == userRef.id) {
-      alert("You are not allowed to vote for your own song");
-      return;
-    }
-
-    // Check if the user has already voted
-    // if (votedUsers && votedUsers.hasOwnProperty(userId)) {
-    //   alert("You has already voted!");
-    //   return;
-    // } else {
-    //   await updateDoc(songRef, {
-    //     [`votedUsers.${userId}`]: true,
-    //   });
-    // }
-
-    await updateDoc(userRef, { points: increment(-5) });
-    await updateDoc(songRef, { votes: increment(1) });
-    await updateDoc(songRef, { VotedUsers: userId });
-
-    const updatedSong = await getDoc(songRef);
-    if (updatedSong.data().votes >= 4) {
-      await addDoc(collection(db, "Playlist"), updatedSong.data());
-      const requesterId = updatedSong.data().userId; // This is the user who requested the song
-      const requesterRef = doc(db, "Users", requesterId);
-      await updateDoc(requesterRef, { points: increment(15) });
-      await deleteDoc(songRef);
-    }
-  }
-
+  // Request song to the Firestore database
   async function requestSong(track) {
     if (!userData || userData.points < 10) {
       alert("Not enough points to request song");
@@ -198,6 +163,31 @@ export default function Dashboard({ code }) {
       archived: false,
     });
     setSearch("");
+  }
+
+  // Voting functionality
+  async function voteForSong(songId) {
+    if (!userData || userData.points < 5) {
+      alert("Not enough points to vote");
+      return;
+    }
+
+    const songRef = doc(db, "RequestedSongs", songId);
+    const userRef = doc(db, "Users", userId);
+    const votedUsers = (await getDoc(songRef)).data().votedUsers;
+
+    await updateDoc(userRef, { points: increment(-5) });
+    await updateDoc(songRef, { votes: increment(1) });
+    await updateDoc(songRef, { VotedUsers: userId });
+
+    const updatedSong = await getDoc(songRef);
+    if (updatedSong.data().votes >= 4) {
+      await addDoc(collection(db, "Playlist"), updatedSong.data());
+      const requesterId = updatedSong.data().userId;
+      const requesterRef = doc(db, "Users", requesterId);
+      await updateDoc(requesterRef, { points: increment(15) });
+      await deleteDoc(songRef);
+    }
   }
 
   return (
@@ -287,3 +277,5 @@ export default function Dashboard({ code }) {
     </>
   );
 }
+// This code is a React component that serves as a dashboard for a Spotify game application. It allows users to search for songs, request them, and vote on requested songs. The component uses Firebase for user authentication and Firestore for storing song requests and playlists. The Spotify Web API is used to search for tracks and manage playback.
+// The component also handles user points, allowing users to earn points for requesting songs and voting on them. The UI is built using React Bootstrap for styling and layout.
