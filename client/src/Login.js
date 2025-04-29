@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Container } from "react-bootstrap";
-import app from "./firebase-config"; // Import the initialized Firebase app
+import app from "./firebase-config";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -9,53 +9,40 @@ import {
   signOut,
 } from "firebase/auth";
 
+const AUTH_URL =
+  "https://accounts.spotify.com/authorize?client_id=2b42a9bc4cdb42b4ad90f51353e95c31&response_type=code&redirect_uri=https://spotifygame.dk&scope=streaming%20user-read-private%20user-read-email%20user-library-read%20user-library-modify%20user-read-playback-state%20user-modify-playback-state";
+
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState(null); // State to track the logged-in user
-  const [isSignUp, setIsSignUp] = useState(true); // Toggle between Sign Up and Login
+  const [user, setUser] = useState(null);
+  const [isSignUp, setIsSignUp] = useState(true);
 
-  const auth = getAuth(app); // Use the Firebase app to initialize auth
+  const auth = getAuth(app);
 
   useEffect(() => {
-    // Listen for authentication state changes
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser); // Update the user state
+      setUser(currentUser);
     });
-
-    return () => unsubscribe(); // Cleanup the listener on component unmount
+    return () => unsubscribe();
   }, [auth]);
 
   const handleSignUp = async (e) => {
     e.preventDefault();
-
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      console.log("User signed up:", userCredential.user);
+      await createUserWithEmailAndPassword(auth, email, password);
       alert("Sign-up successful!");
     } catch (error) {
-      console.error("Error signing up:", error.message);
       alert(error.message);
     }
   };
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      console.log("User logged in:", userCredential.user);
+      await signInWithEmailAndPassword(auth, email, password);
       alert("Login successful!");
     } catch (error) {
-      console.error("Error logging in:", error.message);
       alert(error.message);
     }
   };
@@ -65,14 +52,12 @@ export default function Login() {
       await signOut(auth);
       alert("You have been logged out!");
     } catch (error) {
-      console.error("Error logging out:", error.message);
       alert(error.message);
     }
   };
 
-  const handleGoToParty = () => {
-    // Redirect til næste side i appen
-    window.location.href = "/party"; // eller hvad ruten hedder
+  const handleSpotifyLogin = () => {
+    window.location.href = AUTH_URL;
   };
 
   return (
@@ -80,10 +65,8 @@ export default function Login() {
       className="d-flex flex-column justify-content-center align-items-center"
       style={{ minHeight: "100vh" }}
     >
-      {/* Conditional Rendering */}
       {!user ? (
         <div className="w-100" style={{ maxWidth: "400px" }}>
-          {/* Sign Up or Login Form */}
           <form
             className="mb-4 shadow p-4 rounded bg-light"
             onSubmit={isSignUp ? handleSignUp : handleLogin}
@@ -112,7 +95,6 @@ export default function Login() {
             </button>
           </form>
 
-          {/* Switch to Login/Sign Up Button */}
           <p className="text-center">
             {isSignUp ? (
               <>
@@ -141,32 +123,29 @@ export default function Login() {
         </div>
       ) : (
         <div className="w-100" style={{ maxWidth: "400px" }}>
-          {/* User Profile */}
           <div className="shadow p-4 rounded bg-light text-center">
             <h3>Welcome, {user.email}</h3>
             <p>You are now logged in!</p>
-            <button
-              className="btn btn-danger w-100 mt-3"
-              onClick={handleLogOut}
-            >
+            <button className="btn btn-danger w-100 mt-3" onClick={handleLogOut}>
               Log Out
             </button>
           </div>
         </div>
       )}
 
-      {/* Gå videre-knap */}
+      {/* Login with Spotify */}
       <div className="w-100 mt-4" style={{ maxWidth: "400px" }}>
         <button
-          className={`btn btn-success btn-lg w-100 shadow ${
-            !user ? "disabled" : ""
-          }`}
-          onClick={handleGoToParty}
+          className="btn btn-success btn-lg w-100 shadow"
+          onClick={handleSpotifyLogin}
           disabled={!user}
         >
-          Gå til festen 🎉
+          Login with Spotify
         </button>
       </div>
     </Container>
   );
 }
+
+// This code is a React component that provides a login and sign-up form for users. It uses Firebase Authentication to manage user accounts and allows users to log in with their Spotify account. The component handles both sign-up and login processes, displays appropriate messages, and provides a button to log out. The Spotify login button is disabled until the user is logged in with Firebase.
+// The component uses React hooks to manage state and side effects, such as checking the authentication state and handling form submissions. It also includes error handling for sign-up and login attempts, displaying alerts for success or failure. The layout is styled using Bootstrap classes for a clean and responsive design.
