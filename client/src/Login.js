@@ -8,17 +8,9 @@ import {
   onAuthStateChanged,
   signOut,
 } from "firebase/auth";
-import useAuth from "./useAuth"; // Import the useAuth hook
-
-const AUTH_URL =
-  "https://accounts.spotify.com/authorize?client_id=2b42a9bc4cdb42b4ad90f51353e95c31&response_type=code&redirect_uri=https://spotifygame.dk&scope=streaming%20user-read-private%20user-read-email%20user-library-read%20user-library-modify%20user-read-playback-state%20user-modify-playback-state";
 
 export default function Login() {
-  const code = new URLSearchParams(window.location.search).get("code"); // Get the authorization code from the URL
-  const accessToken = useAuth(code); // Use the useAuth hook to get the access token
-
   const [email, setEmail] = useState("");
-  // const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null); // State to track the logged-in user
   const [isSignUp, setIsSignUp] = useState(true); // Toggle between Sign Up and Login
@@ -78,11 +70,9 @@ export default function Login() {
     }
   };
 
-  const handleSpotifyLogin = () => {
-    if (!accessToken) {
-      // Redirect to Spotify login page if no access token
-      window.location.href = AUTH_URL;
-    }
+  const handleGoToParty = () => {
+    // Redirect til næste side i appen
+    window.location.href = "/party"; // eller hvad ruten hedder
   };
 
   return (
@@ -165,16 +155,16 @@ export default function Login() {
         </div>
       )}
 
-      {/* Login with Spotify */}
+      {/* Gå videre-knap */}
       <div className="w-100 mt-4" style={{ maxWidth: "400px" }}>
         <button
           className={`btn btn-success btn-lg w-100 shadow ${
             !user ? "disabled" : ""
           }`}
-          onClick={handleSpotifyLogin}
+          onClick={handleGoToParty}
           disabled={!user}
         >
-          Login with Spotify!!
+          Gå til festen 🎉
         </button>
       </div>
     </Container>
