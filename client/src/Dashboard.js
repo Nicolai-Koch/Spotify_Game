@@ -278,15 +278,9 @@ export default function Dashboard({ code }) {
         )}
 
         {playingTrack && (
-          <div className="mt-3">
-            <Button
-              variant="success"
-              onClick={() =>
-                window.open(`https://open.spotify.com/track/${playingTrack.uri.split(":")[2]}`, "_blank")
-              }
-            >
-              Play on Spotify
-            </Button>
+          <div className="mt-2">
+            {/* <Player accessToken={accessToken} trackUri={playingTrack.uri} /> */}
+            <h4>Now Playing: {playingTrack.title}</h4>
           </div>
         )}
       </Container>
