@@ -277,12 +277,12 @@ export default function Dashboard({ code }) {
           </Row>
         )}
 
-        <Player
+        {/*<Player
           accessToken={accessToken}
           playlistTracks={playlistTracks}
           currentTrackIndex={currentTrackIndex}
           setCurrentTrackIndex={setCurrentTrackIndex}
-        />
+        />*/}
       </Container>
     </>
   );

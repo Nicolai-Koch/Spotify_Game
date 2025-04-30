@@ -18,7 +18,7 @@ export default function Player({
       currentTrackIndex !== null &&
       playlistTracks.length > 0
     ) {
-      setPlay(true); // Start playback once the access token and track info are available
+      setPlay(false); // Start playback once the access token and track info are available
     }
   }, [accessToken, currentTrackIndex]);
 
