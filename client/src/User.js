@@ -24,6 +24,7 @@ export default function User({ accessToken, trackUri, userId }) {
   return (
     <div>
       {/* <p>Your Points: {points}</p> */}
+      {/*
       <SpotifyPlayer
         token={accessToken}
         showSaveIcon
@@ -33,6 +34,7 @@ export default function User({ accessToken, trackUri, userId }) {
         play={true}
         uris={trackUri ? [trackUri] : []}
       />
+      */}
     </div>
   );
 }

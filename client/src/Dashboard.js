@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import useAuth from "./useAuth"; // Custom hook to handle Spotify authentication
-import Player from "./Player"; // Spotify Player component
+//import Player from "./Player"; // Spotify Player component
 import TrackSearchResult from "./TrackSearchResult"; // Component to display individual track
 import { Container, Form, Button, Row, Col } from "react-bootstrap";
 import SpotifyWebApi from "spotify-web-api-node"; // Spotify Web API wrapper
