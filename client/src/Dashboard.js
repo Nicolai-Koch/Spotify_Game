@@ -277,12 +277,18 @@ export default function Dashboard({ code }) {
           </Row>
         )}
 
-        {/*<Player
-          accessToken={accessToken}
-          playlistTracks={playlistTracks}
-          currentTrackIndex={currentTrackIndex}
-          setCurrentTrackIndex={setCurrentTrackIndex}
-        />*/}
+        {playingTrack && (
+          <div className="mt-3">
+            <Button
+              variant="success"
+              onClick={() =>
+                window.open(`https://open.spotify.com/track/${playingTrack.uri.split(":")[2]}`, "_blank")
+              }
+            >
+              Play on Spotify
+            </Button>
+          </div>
+        )}
       </Container>
     </>
   );
