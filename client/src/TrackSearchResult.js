@@ -9,7 +9,7 @@ export default function TrackSearchResult({ track }) {
     <div
       className="d-flex m-2 align-items-center"
       style={{ cursor: "pointer" }}
-      onClick={handlePlay}
+      //onClick={handlePlay}
     >
       <img src={track.albumUrl} style={{ height: "64px", width: "64px" }}></img>
       <div className="ml-3">
