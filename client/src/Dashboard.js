@@ -105,33 +105,45 @@ export default function Dashboard({ code }) {
   }, []);
 
   useEffect(() => {
-    if (!accessToken) return;
+    const q = query(collection(db, "Playlist"), orderBy("timestamp", "asc"));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const tracks = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setPlaylistTracks(tracks);
+    });
+    return () => unsubscribe();
+  }, []);
 
-    const fetchPlaylistTracks = async () => {
-      try {
-        spotifyApi.setAccessToken(accessToken);
-        const data = await spotifyApi.getPlaylistTracks(playlistId);
-        const tracks = data.body.items.map((item) => {
-          const albumImages = item.track.album?.images || [];
-          const albumUrl = albumImages.length > 0 ? albumImages[0].url : "";
+  // fetchPlaylistTracks();
+  //}, [accessToken]);
 
-          return {
-            id: item.track.id,
-            name: item.track.name,
-            artists: item.track.artists.map((a) => a.name).join(", "),
-            uri: item.track.uri,
-            albumUrl,
-          };
-        });
+  // useEffect(() => {
+  //   if (!accessToken) return;
 
-        setPlaylistTracks(tracks);
-      } catch (err) {
-        console.error("Error fetching playlist tracks:", err);
-      }
-    };
+  //   const fetchPlaylistTracks = async () => {
+  //     try {
+  //       spotifyApi.setAccessToken(accessToken);
+  //       const data = await spotifyApi.getPlaylistTracks(playlistId);
+  //       const tracks = data.body.items.map((item) => {
+  //         const albumImages = item.track.album?.images || [];
+  //         const albumUrl = albumImages.length > 0 ? albumImages[0].url : "";
 
-    fetchPlaylistTracks();
-  }, [accessToken]);
+  //         return {
+  //           id: item.track.id,
+  //           name: item.track.name,
+  //           artists: item.track.artists.map((a) => a.name).join(", "),
+  //           uri: item.track.uri,
+  //           albumUrl,
+  //         };
+  //       });
+
+  //       setPlaylistTracks(tracks);
+  //     } catch (err) {
+  //       console.error("Error fetching playlist tracks:", err);
+  //     }
+  //   };
 
   useEffect(() => {
     if (
@@ -209,6 +221,15 @@ export default function Dashboard({ code }) {
         await spotifyApi.addTracksToPlaylist(playlistId, [updatedSong.uri]);
         console.log("Song added to Spotify:", updatedSong.title);
 
+        //const updatedSong = await getDoc(songRef);
+
+        await addDoc(collection(db, "Playlist"), {
+          title: updatedSong.title || updatedSong.name, // fallback to name if title is missing
+          artist: updatedSong.artist || updatedSong.artists, // fallback to artists if artist is missing
+          uri: updatedSong.uri,
+          albumUrl: updatedSong.albumUrl,
+          timestamp: serverTimestamp(),
+        });
         const requesterRef = doc(db, "Users", updatedSong.userId);
         await updateDoc(requesterRef, { points: increment(15) });
 
@@ -303,8 +324,8 @@ export default function Dashboard({ code }) {
                 >
                   <TrackSearchResult
                     track={{
-                      title: track.name,
-                      artist: track.artists,
+                      title: track.title,
+                      artist: track.artist,
                       uri: track.uri,
                       albumUrl: track.albumUrl,
                     }}
@@ -335,9 +356,29 @@ export default function Dashboard({ code }) {
         )}
 
         {playingTrack && (
-          <div className="mt-2">
-            {/* <Player accessToken={accessToken} trackUri={playingTrack.uri} /> */}
-            <h4>Now Playing: {playingTrack.title}</h4>
+          <div
+            className="mt-2 d-flex align-items-center"
+            style={{
+              padding: "10px",
+              borderRadius: "8px",
+            }}
+          >
+            <img
+              src={playingTrack.albumUrl}
+              alt="Album Art"
+              style={{
+                height: "64px",
+                width: "64px",
+                marginRight: "15px",
+                borderRadius: "4px",
+              }}
+            />
+            <div>
+              <div style={{ fontWeight: "bold", fontSize: "1.1em" }}>
+                {playingTrack.title}
+              </div>
+              <div style={{ color: "gray" }}>{playingTrack.artist}</div>
+            </div>
           </div>
         )}
       </Container>
