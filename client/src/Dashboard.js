@@ -278,12 +278,8 @@ export default function Dashboard({ code }) {
         )}
 
         {playingTrack && (
-          <div className="mt-2 d-flex align-items-center">
-            <img
-              src={playingTrack.albumUrl}
-              alt="Album Art"
-              style={{ height: "64px", width: "64px", marginRight: "10px" }}
-            />
+          <div className="mt-2">
+            {/* <Player accessToken={accessToken} trackUri={playingTrack.uri} /> */}
             <h4>Now Playing: {playingTrack.title}</h4>
           </div>
         )}
