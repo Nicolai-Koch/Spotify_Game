@@ -28,6 +28,7 @@ const playlistId = "3b54L7hG3DunYZOb82dCKO";
 
 export default function Dashboard({ code }) {
   const accessToken = useAuth(code);
+  const [user, setUser] = useState(null); // State to store the logged-in user
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [playingTrack, setPlayingTrack] = useState(null);
@@ -63,10 +64,12 @@ export default function Dashboard({ code }) {
   }, [accessToken]);
 
   useEffect(() => {
-    const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUserId(user.uid);
-        const userRef = doc(db, "Users", user.uid);
+    // Listen for authentication state changes
+    const unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser); // Set the logged-in user
+        setUserId(currentUser.uid); // Store the user's ID
+        const userRef = doc(db, "Users", currentUser.uid);
         const unsubscribeSnapshot = onSnapshot(userRef, (docSnap) => {
           if (docSnap.exists()) {
             setUserData(docSnap.data());
@@ -78,12 +81,13 @@ export default function Dashboard({ code }) {
         });
         return () => unsubscribeSnapshot();
       } else {
+        setUser(null); // Clear the user state if logged out
         setUserData(null);
         setLoadingUser(false);
       }
     });
 
-    return () => unsubscribeAuth();
+    return () => unsubscribeAuth(); // Cleanup the listener on unmount
   }, []);
 
   useEffect(() => {
@@ -246,11 +250,21 @@ export default function Dashboard({ code }) {
         className="d-flex flex-column py-2"
         style={{ height: "100vh" }}
       >
+        <div className="d-flex justify-content-between align-items-center mb-3">
+        {/* User's email on the left */}
+        {user && (
+          <div>
+            <strong>{user.email.split("@")[0]}</strong>
+          </div>
+        )}
+
+        {/* User's points on the right */}
         {!loadingUser && userData && (
-          <div style={{ textAlign: "right", marginBottom: "10px" }}>
+          <div>
             <strong>Your Points:</strong> {userData.points}
           </div>
         )}
+      </div>
 
         <Form.Control
           type="search"
@@ -279,7 +293,7 @@ export default function Dashboard({ code }) {
         )}
 
         {!search && (
-          <Row className="mt-3 flex-grow-1" style={{ overflowY: "auto" }}>
+          <Row className="mt-3 flex-grow-1 playlists" style={{ overflowY: "auto" }}>
             <Col>
               <h4>Current Playlist</h4>
               {playlistTracks.map((track) => (

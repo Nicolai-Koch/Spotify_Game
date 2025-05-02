@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Container } from "react-bootstrap";
+import { Container, Tooltip, OverlayTrigger } from "react-bootstrap";
 import app from "./firebase-config";
+import spotifyLogo from "./img/SpotifyLogo.png";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -67,7 +68,17 @@ export default function Login() {
         minHeight: "100vh",
       }}
     >
-      <h1 className="mb-5">Spotify Game</h1>
+      <div
+        className="mb-5 text-center"
+        style={{
+          position: "absolute", 
+          top: "20px", 
+        }}
+      >
+        <h1>Spotify Game</h1>
+      </div>
+
+      {/* Login Box */}
       {!user ? (
         <div className="w-100" style={{ maxWidth: "400px" }}>
           <form
@@ -103,7 +114,10 @@ export default function Login() {
                   Already have an account?{" "}
                   <button
                     className="btn btn-link p-0 custom-link"
-                    onClick={() => setIsSignUp(false)}
+                    onClick={(e) => {
+                      e.preventDefault(); // Prevent form submission
+                      setIsSignUp(false);
+                    }}
                     style={{ textDecoration: "none" }}
                   >
                     Log in
@@ -114,7 +128,10 @@ export default function Login() {
                   Don't have an account?{" "}
                   <button
                     className="btn btn-link p-0 custom-link"
-                    onClick={() => setIsSignUp(true)}
+                    onClick={(e) => {
+                      e.preventDefault(); // Prevent form submission
+                      setIsSignUp(true);
+                    }}
                     style={{ textDecoration: "none" }}
                   >
                     Sign up
@@ -126,7 +143,7 @@ export default function Login() {
         </div>
       ) : (
         <div className="w-100" style={{ maxWidth: "400px" }}>
-          <div className="shadow p-4 rounded bg-light text-center">
+          <div className="mb-4 shadow p-4 rounded text-center custom-shape"> 
             <h3>Welcome, {user.email.split("@")[0]}</h3>
             <p>You are now logged in!</p>
             <button
@@ -140,14 +157,41 @@ export default function Login() {
       )}
 
       {/* Login with Spotify */}
-      <div className="w-100 mt-4" style={{ maxWidth: "400px" }}>
-        <button
-          className="btn btn-success btn-lg w-100 shadow"
-          onClick={handleSpotifyLogin}
-          disabled={!user}
+      <div className="w-100 mt-2" style={{ maxWidth: "400px" }}>
+        <OverlayTrigger
+          placement="bottom" // Tooltip position
+          overlay={
+            !user ? ( // Render the tooltip only when the button is disabled
+              <Tooltip id="spotify-tooltip">
+                Login or sign up before using Spotify login
+              </Tooltip>
+            ) : <></> // Render nothing when the tooltip is not needed
+          }
         >
-          Login with Spotify
-        </button>
+          <span className="d-inline-block w-100">
+            <button
+              className="btn btn-success btn-lg w-100 shadow d-flex align-items-center justify-content-center"
+              style={{
+                margin: "0px",
+                padding: "10px",
+                pointerEvents: user ? "auto" : "none", // Allow hover even when disabled
+              }}
+              onClick={handleSpotifyLogin}
+              disabled={!user}
+            >
+              <img
+                src={spotifyLogo}
+                alt="Spotify Logo"
+                style={{
+                  height: "28px",
+                  width: "28px",
+                  marginRight: "10px",
+                }}
+              />
+              <span>Login with Spotify</span>
+            </button>
+          </span>
+        </OverlayTrigger>
       </div>
     </Container>
   );

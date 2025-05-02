@@ -22,16 +22,41 @@ h1 {
     font-style: normal;
     font-weight: 400;
     font-display: swap;
-    font-size: 60px;
+    font-size: 70px;
     color: black;
     margin-top: 50px;
 }
 
 .custom-form {
-    margin-top: 50px;
+    margin-top: 150px;
+}
+
+.custom-shape {
+    margin-top: 55px;
 }
 
 .custom-text {
     color: rgb(226, 226, 226);
     margin: 0;
+}
+
+.text-center {
+    color: rgb(226, 226, 226);
+}
+
+.tooltip-arrow {
+  display: none !important; /* Hide the arrow */
+}
+
+.align-items-center {
+    margin-top: 10px;
+    color: rgb(226, 226, 226);
+}
+
+.playlists {
+    color: rgb(226, 226, 226);
+}
+
+.mt-3 {
+    color: rgb(226, 226, 226);
 }
