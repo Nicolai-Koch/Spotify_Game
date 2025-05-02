@@ -9,22 +9,17 @@ export default function useAuth(code) {
   useEffect(() => {
     if (!code) return;
 
-    console.log("Authorization code:", code);
-
     axios
-      .post("/api/login", { code })
+      .post("http://localhost:3001/login", { code }) // ← FIXED PORT
       .then((res) => {
         setAccessToken(res.data.accessToken);
         setRefreshToken(res.data.refreshToken);
         setExpiresIn(res.data.expiresIn);
-
-        // Remove the code from the URL to prevent re-triggering the login flow
         window.history.replaceState({}, null, "/");
       })
       .catch((err) => {
         console.error("Error during login:", err.message);
-        //alert("Failed to log in. Please try again.");
-        //window.location = "/"; // Redirect to the root on failure
+        window.location = "/";
       });
   }, [code]);
 
@@ -33,19 +28,18 @@ export default function useAuth(code) {
 
     const interval = setInterval(() => {
       axios
-        .post("/api/refresh", { refreshToken })
+        .post("http://localhost:3001/refresh", { refreshToken }) // ← FIXED PORT
         .then((res) => {
           setAccessToken(res.data.accessToken);
           setExpiresIn(res.data.expiresIn);
         })
         .catch((err) => {
           console.error("Error refreshing token:", err.message);
-          alert("Session expired. Please log in again.");
           window.location = "/";
         });
-    }, (expiresIn - 60) * 1000); // Refresh token 1 minute before expiration
+    }, (expiresIn - 60) * 1000);
 
-    return () => clearInterval(interval); // Clear interval on component unmount
+    return () => clearInterval(interval);
   }, [refreshToken, expiresIn]);
 
   return accessToken;

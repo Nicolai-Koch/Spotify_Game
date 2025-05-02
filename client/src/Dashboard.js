@@ -1,14 +1,12 @@
 import { useState, useEffect } from "react";
-import useAuth from "./useAuth"; // Custom hook to handle Spotify authentication
-//import Player from "./Player"; // Spotify Player component
-import TrackSearchResult from "./TrackSearchResult"; // Component to display individual track
+import useAuth from "./useAuth";
+import TrackSearchResult from "./TrackSearchResult";
 import { Container, Form, Button, Row, Col } from "react-bootstrap";
-import SpotifyWebApi from "spotify-web-api-node"; // Spotify Web API wrapper
-import { auth, db } from "./firebase-config"; // Firebase configuration
-import { onAuthStateChanged } from "firebase/auth"; // Firebase auth listener
-import User from "./User"; // Component for user logic
+import SpotifyWebApi from "spotify-web-api-node";
+import { auth, db } from "./firebase-config";
+import { onAuthStateChanged } from "firebase/auth";
+import User from "./User";
 
-// Firebase Firestore imports
 import {
   collection,
   onSnapshot,
@@ -23,12 +21,10 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 
-// Create a Spotify API instance
 const spotifyApi = new SpotifyWebApi({
   clientId: "2b42a9bc4cdb42b4ad90f51353e95c31",
 });
-
-// ... all your existing imports remain the same
+const playlistId = "3b54L7hG3DunYZOb82dCKO";
 
 export default function Dashboard({ code }) {
   const accessToken = useAuth(code);
@@ -43,11 +39,21 @@ export default function Dashboard({ code }) {
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
 
   function chooseTrack(track) {
-    const index = playlistTracks.findIndex((t) => t.uri === track.uri);
+    const normalizedTrack = {
+      title: track.title || track.name,
+      artist: track.artist || track.artists,
+      uri: track.uri,
+      albumUrl: track.albumUrl,
+    };
+
+    const index = playlistTracks.findIndex(
+      (t) => t.uri === normalizedTrack.uri
+    );
     if (index !== -1) {
       setCurrentTrackIndex(index);
     }
-    setPlayingTrack(track);
+
+    setPlayingTrack(normalizedTrack);
     setSearch("");
   }
 
@@ -95,25 +101,49 @@ export default function Dashboard({ code }) {
   }, []);
 
   useEffect(() => {
-    const q = query(collection(db, "Playlist"), orderBy("timestamp", "asc"));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const tracks = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setPlaylistTracks(tracks);
-    });
-    return () => unsubscribe();
-  }, []);
+    if (!accessToken) return;
+
+    const fetchPlaylistTracks = async () => {
+      try {
+        spotifyApi.setAccessToken(accessToken);
+        const data = await spotifyApi.getPlaylistTracks(playlistId);
+        const tracks = data.body.items.map((item) => {
+          const albumImages = item.track.album?.images || [];
+          const albumUrl = albumImages.length > 0 ? albumImages[0].url : "";
+
+          return {
+            id: item.track.id,
+            name: item.track.name,
+            artists: item.track.artists.map((a) => a.name).join(", "),
+            uri: item.track.uri,
+            albumUrl,
+          };
+        });
+
+        setPlaylistTracks(tracks);
+      } catch (err) {
+        console.error("Error fetching playlist tracks:", err);
+      }
+    };
+
+    fetchPlaylistTracks();
+  }, [accessToken]);
 
   useEffect(() => {
     if (
+      !playingTrack &&
       playlistTracks.length > 0 &&
       currentTrackIndex < playlistTracks.length
     ) {
-      setPlayingTrack(playlistTracks[currentTrackIndex]);
+      const track = playlistTracks[currentTrackIndex];
+      setPlayingTrack({
+        title: track.name,
+        artist: track.artists,
+        uri: track.uri,
+        albumUrl: track.albumUrl,
+      });
     }
-  }, [currentTrackIndex, playlistTracks]);
+  }, [currentTrackIndex, playlistTracks, playingTrack]);
 
   useEffect(() => {
     if (!search) return setSearchResults([]);
@@ -148,36 +178,41 @@ export default function Dashboard({ code }) {
 
     const songRef = doc(db, "RequestedSongs", songId);
     const userRef = doc(db, "Users", userId);
-    const votedUsers = (await getDoc(songRef)).data().votedUsers;
 
-    // Don't allow users to vote for their own songs
-    const songDoc = await getDoc(songRef);
-    if (songDoc.data().userId == userRef.id) {
-      alert("You are not allowed to vote for your own song");
+    const songSnap = await getDoc(songRef);
+    if (!songSnap.exists()) {
+      alert("Song not found");
       return;
     }
 
-    // Check if the user has already voted
-    // if (votedUsers && votedUsers.hasOwnProperty(userId)) {
-    //   alert("You has already voted!");
-    //   return;
-    // } else {
-    //   await updateDoc(songRef, {
-    //     [`votedUsers.${userId}`]: true,
-    //   });
-    // }
+    const songData = songSnap.data();
+    if (songData.userId === userId) {
+      alert("You can't vote for your own song");
+      return;
+    }
 
     await updateDoc(userRef, { points: increment(-5) });
-    await updateDoc(songRef, { votes: increment(1) });
-    await updateDoc(songRef, { VotedUsers: userId });
+    await updateDoc(songRef, {
+      [`votedUsers.${userId}`]: true,
+      votes: increment(1),
+    });
 
-    const updatedSong = await getDoc(songRef);
-    if (updatedSong.data().votes >= 4) {
-      await addDoc(collection(db, "Playlist"), updatedSong.data());
-      const requesterId = updatedSong.data().userId; // This is the user who requested the song
-      const requesterRef = doc(db, "Users", requesterId);
-      await updateDoc(requesterRef, { points: increment(15) });
-      await deleteDoc(songRef);
+    const updatedSongSnap = await getDoc(songRef);
+    const updatedSong = updatedSongSnap.data();
+
+    if (updatedSong.votes >= 4) {
+      try {
+        await spotifyApi.addTracksToPlaylist(playlistId, [updatedSong.uri]);
+        console.log("Song added to Spotify:", updatedSong.title);
+
+        const requesterRef = doc(db, "Users", updatedSong.userId);
+        await updateDoc(requesterRef, { points: increment(15) });
+
+        await deleteDoc(songRef);
+      } catch (err) {
+        console.error("Failed to add song to playlist:", err);
+        alert("Failed to add song to playlist.");
+      }
     }
   }
 
@@ -246,13 +281,21 @@ export default function Dashboard({ code }) {
         {!search && (
           <Row className="mt-3 flex-grow-1" style={{ overflowY: "auto" }}>
             <Col>
-              <h4>Current Playlist!!</h4>
+              <h4>Current Playlist</h4>
               {playlistTracks.map((track) => (
                 <div
                   key={track.id}
                   className="d-flex justify-content-between align-items-center mb-2"
                 >
-                  <TrackSearchResult track={track} chooseTrack={chooseTrack} />
+                  <TrackSearchResult
+                    track={{
+                      title: track.name,
+                      artist: track.artists,
+                      uri: track.uri,
+                      albumUrl: track.albumUrl,
+                    }}
+                    chooseTrack={chooseTrack}
+                  />
                 </div>
               ))}
             </Col>

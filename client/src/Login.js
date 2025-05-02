@@ -10,7 +10,7 @@ import {
 } from "firebase/auth";
 
 const AUTH_URL =
-  "https://accounts.spotify.com/authorize?client_id=2b42a9bc4cdb42b4ad90f51353e95c31&response_type=code&redirect_uri=http://localhost:3000&scope=streaming%20user-read-private%20user-read-email%20user-library-read%20user-library-modify%20user-read-playback-state%20user-modify-playback-state";
+  "https://accounts.spotify.com/authorize?client_id=2b42a9bc4cdb42b4ad90f51353e95c31&response_type=code&redirect_uri=http://localhost:3000&scope=streaming%20user-read-private%20user-read-email%20user-library-read%20user-library-modify%20user-read-playback-state%20user-modify-playback-state%20playlist-read-private%20playlist-read-collaborative%20playlist-modify-private%20playlist-modify-public";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -96,41 +96,43 @@ export default function Login() {
             <button type="submit" className="btn btn-primary w-100 mb-4">
               {isSignUp ? "Sign Up" : "Login"}
             </button>
-          
 
-          <p className="text-center custom-text">
-            {isSignUp ? (
-              <>
-                Already have an account?{" "}
-                <button
-                  className="btn btn-link p-0 custom-link"
-                  onClick={() => setIsSignUp(false)}
-                  style={{ textDecoration: "none" }}
-                >
-                  Log in
-                </button>
-              </>
-            ) : (
-              <>
-                Don't have an account?{" "}
-                <button
-                  className="btn btn-link p-0 custom-link"
-                  onClick={() => setIsSignUp(true)}
-                  style={{ textDecoration: "none" }}
-                >
-                  Sign up
-                </button>
-              </>
-            )}
-          </p>
+            <p className="text-center custom-text">
+              {isSignUp ? (
+                <>
+                  Already have an account?{" "}
+                  <button
+                    className="btn btn-link p-0 custom-link"
+                    onClick={() => setIsSignUp(false)}
+                    style={{ textDecoration: "none" }}
+                  >
+                    Log in
+                  </button>
+                </>
+              ) : (
+                <>
+                  Don't have an account?{" "}
+                  <button
+                    className="btn btn-link p-0 custom-link"
+                    onClick={() => setIsSignUp(true)}
+                    style={{ textDecoration: "none" }}
+                  >
+                    Sign up
+                  </button>
+                </>
+              )}
+            </p>
           </form>
         </div>
       ) : (
         <div className="w-100" style={{ maxWidth: "400px" }}>
           <div className="shadow p-4 rounded bg-light text-center">
-            <h3>Welcome, {user.email.split('@')[0]}</h3>
+            <h3>Welcome, {user.email.split("@")[0]}</h3>
             <p>You are now logged in!</p>
-            <button className="btn btn-danger w-100 mt-3" onClick={handleLogOut}>
+            <button
+              className="btn btn-danger w-100 mt-3"
+              onClick={handleLogOut}
+            >
               Log Out
             </button>
           </div>
