@@ -97,9 +97,8 @@ export default function Dashboard({ code }) {
       orderBy("timestamp", "desc")
     );
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      setRequestedSongs(
-        snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
-      );
+      const songs = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      setRequestedSongs(songs);
     });
     return () => unsubscribe();
   }, []);
@@ -272,20 +271,20 @@ export default function Dashboard({ code }) {
         style={{ height: "100vh" }}
       >
         <div className="d-flex justify-content-between align-items-center mb-3">
-        {/* User's email on the left */}
-        {user && (
-          <div>
-            <strong>{user.email.split("@")[0]}</strong>
-          </div>
-        )}
+          {/* User's email on the left */}
+          {user && (
+            <div>
+              <strong>{user.email.split("@")[0]}</strong>
+            </div>
+          )}
 
-        {/* User's points on the right */}
-        {!loadingUser && userData && (
-          <div>
-            <strong>Your Points:</strong> {userData.points}
-          </div>
-        )}
-      </div>
+          {/* User's points on the right */}
+          {!loadingUser && userData && (
+            <div>
+              <strong>Your Points:</strong> {userData.points}
+            </div>
+          )}
+        </div>
 
         <Form.Control
           type="search"
@@ -314,7 +313,10 @@ export default function Dashboard({ code }) {
         )}
 
         {!search && (
-          <Row className="mt-3 flex-grow-1 playlists" style={{ overflowY: "auto" }}>
+          <Row
+            className="mt-3 flex-grow-1 playlists"
+            style={{ overflowY: "auto" }}
+          >
             <Col>
               <h4>Current Playlist</h4>
               {playlistTracks.map((track) => (
