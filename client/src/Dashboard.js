@@ -4,7 +4,7 @@ import TrackSearchResult from "./TrackSearchResult";
 import { Container, Form, Button, Row, Col } from "react-bootstrap";
 import SpotifyWebApi from "spotify-web-api-node";
 import { auth, db } from "./firebase-config";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import User from "./User";
 
 import {
@@ -26,8 +26,8 @@ const spotifyApi = new SpotifyWebApi({
 });
 const playlistId = "3b54L7hG3DunYZOb82dCKO";
 
-export default function Dashboard({ code }) {
-  const accessToken = useAuth(code);
+export default function Dashboard() {
+  const accessToken = useAuth(); // No code argument
   const [user, setUser] = useState(null); // State to store the logged-in user
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -259,6 +259,15 @@ export default function Dashboard({ code }) {
     setSearch("");
   }
 
+  const handleLogOut = async () => {
+    try {
+      await signOut(auth);
+      // Optionally, show a message or redirect
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
   return (
     <>
       <User
@@ -284,6 +293,11 @@ export default function Dashboard({ code }) {
               <strong>Your Points:</strong> {userData.points}
             </div>
           )}
+
+          {/* Log Out button on the far right */}
+          <button className="btn btn-danger ms-3" onClick={handleLogOut}>
+            Log Out
+          </button>
         </div>
 
         <Form.Control

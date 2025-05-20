@@ -1,46 +1,40 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-export default function useAuth(code) {
+export default function useAuth() {
   const [accessToken, setAccessToken] = useState();
-  const [refreshToken, setRefreshToken] = useState();
   const [expiresIn, setExpiresIn] = useState();
 
   useEffect(() => {
-    if (!code) return;
-
+    // Always fetch admin access token
     axios
-      .post("http://localhost:3001/login", { code }) // ← FIXED PORT
+      .get("http://localhost:3001/admin-access-token")
       .then((res) => {
         setAccessToken(res.data.accessToken);
-        setRefreshToken(res.data.refreshToken);
         setExpiresIn(res.data.expiresIn);
-        window.history.replaceState({}, null, "/");
       })
       .catch((err) => {
-        console.error("Error during login:", err.message);
-        window.location = "/";
+        console.error("Error fetching admin access token:", err.message);
       });
-  }, [code]);
+  }, []);
 
   useEffect(() => {
-    if (!refreshToken || !expiresIn) return;
+    if (!expiresIn) return;
 
     const interval = setInterval(() => {
       axios
-        .post("http://localhost:3001/refresh", { refreshToken }) // ← FIXED PORT
+        .get("http://localhost:3001/admin-access-token")
         .then((res) => {
           setAccessToken(res.data.accessToken);
           setExpiresIn(res.data.expiresIn);
         })
         .catch((err) => {
-          console.error("Error refreshing token:", err.message);
-          window.location = "/";
+          console.error("Error refreshing admin access token:", err.message);
         });
     }, (expiresIn - 60) * 1000);
 
     return () => clearInterval(interval);
-  }, [refreshToken, expiresIn]);
+  }, [expiresIn]);
 
   return accessToken;
 }

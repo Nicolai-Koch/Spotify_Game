@@ -70,6 +70,26 @@ app.post("/login", (req, res) => {
     });
 });
 
+app.get("/admin-access-token", async (req, res) => {
+  const spotifyApi = new SpotifyWebApi({
+    redirectUri: process.env.REDIRECT_URI,
+    clientId: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET,
+    refreshToken: process.env.ADMIN_REFRESH_TOKEN,
+  });
+
+  try {
+    const data = await spotifyApi.refreshAccessToken();
+    res.json({
+      accessToken: data.body.accessToken,
+      expiresIn: data.body.expiresIn,
+    });
+  } catch (err) {
+    console.error("Error refreshing admin access token:", err);
+    res.sendStatus(400);
+  }
+});
+
 //wss.on("connection", (ws) => {
   //console.log("WebSocket client connected");
 
