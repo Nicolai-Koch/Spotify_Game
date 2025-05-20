@@ -1,15 +1,15 @@
 import React from "react";
 
 export default function TrackSearchResult({ track, chooseTrack }) {
-  function handlePlay() {
-    if (chooseTrack) chooseTrack(track);
-  }
+  //function handlePlay() {
+  //  if (chooseTrack) chooseTrack(track);
+  //}
 
   return (
     <div
       className="d-flex m-2 align-items-center"
       style={{ cursor: "pointer" }}
-      onClick={handlePlay}
+      //onClick={handlePlay}
     >
       <img src={track.albumUrl} alt={`${track.title} album cover`} style={{ height: "64px", width: "64px" }}></img>
       <div className="ml-3">

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import useAuth from "./useAuth";
 import TrackSearchResult from "./TrackSearchResult";
 import { Container, Form, Button, Row, Col } from "react-bootstrap";
-import SpotifyWebApi from "spotify-web-api-node";
+import SpotifyWebApi from "spotify-web-api-js";
 import { auth, db } from "./firebase-config";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import User from "./User";
@@ -21,9 +21,7 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 
-const spotifyApi = new SpotifyWebApi({
-  clientId: "2b42a9bc4cdb42b4ad90f51353e95c31",
-});
+const spotifyApi = new SpotifyWebApi();
 const playlistId = "3b54L7hG3DunYZOb82dCKO";
 
 export default function Dashboard() {
@@ -60,6 +58,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!accessToken) return;
+    console.log("Spotify access token:", accessToken);
     spotifyApi.setAccessToken(accessToken);
   }, [accessToken]);
 
@@ -161,27 +160,45 @@ export default function Dashboard() {
   }, [currentTrackIndex, playlistTracks, playingTrack]);
 
   useEffect(() => {
-    if (!search) return setSearchResults([]);
-    if (!accessToken) return;
+    if (!search) {
+      setSearchResults([]);
+      console.log("No search input, skipping search.");
+      return;
+    }
+    if (!accessToken) {
+      console.log("No access token, skipping search.");
+      return;
+    }
     let cancel = false;
-    spotifyApi.searchTracks(search).then((res) => {
-      if (cancel) return;
-      setSearchResults(
-        res.body.tracks.items.map((track) => {
-          const smallestAlbumImage = track.album.images.reduce(
-            (smallest, image) =>
-              image.height < smallest.height ? image : smallest,
-            track.album.images[0]
-          );
-          return {
-            artist: track.artists[0].name,
-            title: track.name,
-            uri: track.uri,
-            albumUrl: smallestAlbumImage.url,
-          };
-        })
-      );
-    });
+    console.log("Searching for:", search, "with token:", accessToken);
+    spotifyApi.searchTracks(search)
+      .then((res) => {
+        console.log("Spotify search response:", res);
+        if (cancel) return;
+        const items = res.tracks.items; 
+        if (!items || items.length === 0) {
+          console.log("No search results found for:", search);
+        }
+        setSearchResults(
+          items.map((track) => {
+            const smallestAlbumImage = track.album.images.reduce(
+              (smallest, image) =>
+                image.height < smallest.height ? image : smallest,
+              track.album.images[0]
+            );
+            return {
+              artist: track.artists[0].name,
+              title: track.name,
+              uri: track.uri,
+              albumUrl: smallestAlbumImage.url,
+            };
+          })
+        );
+      })
+      .catch((err) => {
+        console.error("Spotify search error:", err);
+        setSearchResults([]);
+      });
     return () => (cancel = true);
   }, [search, accessToken]);
 

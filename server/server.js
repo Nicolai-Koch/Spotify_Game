@@ -32,10 +32,10 @@ app.post("/refresh", (req, res) => {
   spotifyApi
     .refreshAccessToken()
     .then((data) => {
-      console.log("New access token:", data.body.accessToken); // Log the new access token
+      console.log("New access token:", data.body.access_token); // <-- use underscore
       res.json({
-        accessToken: data.body.accessToken,
-        expiresIn: data.body.expiresIn,
+        accessToken: data.body.access_token,
+        expiresIn: data.body.expires_in,    
       });
     })
     .catch((err) => {
@@ -80,13 +80,14 @@ app.get("/api/admin-access-token", async (req, res) => {
 
   try {
     const data = await spotifyApi.refreshAccessToken();
+    console.log("Spotify refreshAccessToken response:", data.body);
     res.json({
-      accessToken: data.body.accessToken,
-      expiresIn: data.body.expiresIn,
+      accessToken: data.body.access_token,
+      expiresIn: data.body.expires_in,   
     });
   } catch (err) {
     console.error("Error refreshing admin access token:", err);
-    res.sendStatus(400);
+    res.status(400).json({});
   }
 });
 
