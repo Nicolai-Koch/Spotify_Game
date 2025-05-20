@@ -175,7 +175,7 @@ export default function Dashboard() {
       .then((res) => {
         console.log("Spotify search response:", res);
         if (cancel) return;
-        const items = res.tracks.items; 
+        const items = res.tracks.items;
         if (!items || items.length === 0) {
           console.log("No search results found for:", search);
         }
