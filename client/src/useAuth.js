@@ -8,7 +8,7 @@ export default function useAuth() {
   useEffect(() => {
     // Always fetch admin access token
     axios
-      .get("http://localhost:3001/api/admin-access-token")
+      .get("https://spotifygame.dk/api/admin-access-token")
       .then((res) => {
         setAccessToken(res.data.accessToken);
         setExpiresIn(res.data.expiresIn);
@@ -23,7 +23,7 @@ export default function useAuth() {
 
     const interval = setInterval(() => {
       axios
-        .get("http://localhost:3001/api/admin-access-token")
+        .get("https://spotifygame.dk/api/admin-access-token")
         .then((res) => {
           setAccessToken(res.data.accessToken);
           setExpiresIn(res.data.expiresIn);
