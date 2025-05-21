@@ -354,9 +354,11 @@ export default function Dashboard() {
           )}
 
           {/* Log Out button on the far right */}
+          {/* 
           <button className="btn btn-danger ms-3" onClick={handleLogOut}>
             Log Out
           </button>
+          */}
         </div>
 
         <Form.Control
