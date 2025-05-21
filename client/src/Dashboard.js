@@ -40,6 +40,8 @@ export default function Dashboard() {
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [leaderBoard, setLeaderBoard] = useState([]);
   const [pointsBg, setPointsBg] = useState(""); // for background color
+  const [showPromotionMessage, setShowPromotionMessage] = useState(false);
+  const [activeList, setActiveList] = useState("playlist"); // "playlist" or "requested"
 
   const prevPointsRef = useRef();
   const jsConfettiRef = useRef(null);
@@ -276,8 +278,12 @@ export default function Dashboard() {
         });
 
         // Trigger confetti!
-        if (jsConfettiRef.current) {
-          jsConfettiRef.current.addConfetti(); // No options = normal confetti
+        if(userId === updatedSong.userId) {
+          if (jsConfettiRef.current) {
+            jsConfettiRef.current.addConfetti(); // normal confetti
+            setShowPromotionMessage(true);
+            setTimeout(() => setShowPromotionMessage(false), 3000);
+          }
         }
 
         const requesterRef = doc(db, "Users", updatedSong.userId);
@@ -329,8 +335,40 @@ export default function Dashboard() {
     }
   }, [userData?.points]);
 
+  const handleLogOut = async () => {
+    try {
+      await signOut(auth);
+      // App.js will redirect to Login automatically
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
   return (
     <>
+      {showPromotionMessage && (
+        <div
+          style={{
+            position: "fixed",
+            top: "30px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            background: "#28a745",
+            color: "white",
+            padding: "10px 16px",
+            borderRadius: "8px",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+            zIndex: 2000,
+            fontWeight: "bold",
+            fontSize: "1em",
+            maxWidth: "90vw",
+            textAlign: "center",
+            wordBreak: "break-word"
+          }}
+        >
+          🎉 Congrats! Your song promoted to Playlist
+        </div>
+      )}
       <User
         accessToken={accessToken}
         trackUri={playingTrack?.uri}
@@ -366,12 +404,10 @@ export default function Dashboard() {
             </div>
           )}
 
-          {/* Log Out button on the far right */}
-          {/* 
+          {/* Log Out Now button on the far right */}
           <button className="btn btn-danger ms-3" onClick={handleLogOut}>
             Log Out
           </button>
-          */}
         </div>
 
         <Form.Control
@@ -401,70 +437,101 @@ export default function Dashboard() {
         )}
 
         {!search && (
-          <Row
-            className="mt-3 flex-grow-1 playlists"
-            style={{ overflowY: "auto" }}
-          >
-            <Col>
-              <h4>Current Playlist</h4>
-              {playlistTracks.map((track) => (
-                <div
-                  key={track.id}
-                  className="d-flex justify-content-between align-items-center mb-2"
-                >
-                  <TrackSearchResult
-                    track={{
-                      title: track.title,
-                      artist: track.artist,
-                      uri: track.uri,
-                      albumUrl: track.albumUrl,
-                    }}
-                    chooseTrack={chooseTrack}
-                  />
-                </div>
-              ))}
-            </Col>
-
-            <Col>
-              <h4>Requested Songs</h4>
-              {requestedSongs.map((track) => (
-                <div
-                  key={track.id}
-                  className="d-flex justify-content-between align-items-center mb-2"
-                >
-                  <TrackSearchResult track={track} chooseTrack={chooseTrack} />
-                  <Button
-                    variant="outline-primary"
-                    onClick={() => voteForSong(track.id)}
-                  >
-                    Vote ({track.votes})
-                  </Button>
-                </div>
-              ))}
-            </Col>
-            <Col>
-              <h4>Leaderboard</h4>
-              {leaderBoard.map((user) => (
-                <div
-                  key={user.id}
-                  className="d-flex justify-content-between align-items-center mb-2"
-                >
+          <>
+            <div className="list-switch-btns d-flex justify-content-center mb-3">
+              <Button
+                variant={activeList === "playlist" ? "primary" : "outline-primary"}
+                className="me-2"
+                onClick={() => setActiveList("playlist")}
+              >
+                Current Playlist
+              </Button>
+              <Button
+                variant={activeList === "requested" ? "primary" : "outline-primary"}
+                onClick={() => setActiveList("requested")}
+              >
+                Requested Songs
+              </Button>
+            </div>
+            <Row className="mt-3 flex-grow-1 playlists" style={{ overflowY: "auto" }}>
+              {/* On desktop: show both lists. On mobile: show only the active one */}
+              <Col xs={12} md={4}>
+                {(activeList === "playlist" || window.innerWidth >= 768) && (
                   <div>
-                    {user.email ? (
-                      user.email.includes("@") ? (
-                        user.email.split("@")[0]
-                      ) : (
-                        user.email
-                      )
-                    ) : (
-                      <span style={{ color: "gray" }}>Unknown</span>
-                    )}
+                    <h4>Current Playlist</h4>
+                    <div className="scrollable-list">
+                      {playlistTracks.map((track) => (
+                        <div
+                          key={track.id}
+                          className="d-flex justify-content-between align-items-center mb-2"
+                        >
+                          <TrackSearchResult
+                            track={{
+                              title: track.title,
+                              artist: track.artist,
+                              uri: track.uri,
+                              albumUrl: track.albumUrl,
+                            }}
+                            chooseTrack={chooseTrack}
+                          />
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                  <div>{user.songsPromoted} songs promoted</div>
+                )}
+              </Col>
+              <Col xs={12} md={4}>
+                {(activeList === "requested" || window.innerWidth >= 768) && (
+                  <div>
+                    <h4>Requested Songs</h4>
+                    <div className="scrollable-list">
+                      {requestedSongs.map((track) => (
+                        <div
+                          key={track.id}
+                          className="d-flex justify-content-between align-items-center mb-2 requested-row"
+                        >
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <TrackSearchResult track={track} chooseTrack={chooseTrack} />
+                          </div>
+                          <Button
+                            className="vote-btn"
+                            variant="btn btn-success"
+                            onClick={() => voteForSong(track.id)}
+                          >
+                            Vote ({track.votes})
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </Col>
+              <Col xs={12} md={4}>
+                <h4>Leaderboard</h4>
+                <div className="scrollable-list">
+                  {leaderBoard.map((user) => (
+                    <div
+                      key={user.id}
+                      className="d-flex justify-content-between align-items-center mb-2"
+                    >
+                      <div>
+                        {user.email ? (
+                          user.email.includes("@") ? (
+                            user.email.split("@")[0]
+                          ) : (
+                            user.email
+                          )
+                        ) : (
+                          <span style={{ color: "gray" }}>Unknown</span>
+                        )}
+                      </div>
+                      <div>{user.songsPromoted} songs promoted</div>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </Col>
-          </Row>
+              </Col>
+            </Row>
+          </>
         )}
 
         {playingTrack && (
@@ -478,18 +545,28 @@ export default function Dashboard() {
             <img
               src={playingTrack.albumUrl}
               alt="Album Art"
+              className="album-art"
               style={{
-                height: "64px",
-                width: "64px",
-                marginRight: "15px",
+                height: "48px",
+                width: "48px",
+                maxWidth: "20vw",
+                marginRight: "10px",
                 borderRadius: "4px",
               }}
             />
-            <div>
-              <div style={{ fontWeight: "bold", fontSize: "1.1em" }}>
+            <div className="playing-info-wrap">
+              <div
+                className="playing-title"
+                title={playingTrack.title}
+              >
                 {playingTrack.title}
               </div>
-              <div style={{ color: "gray" }}>{playingTrack.artist}</div>
+              <div
+                className="playing-artist"
+                title={playingTrack.artist}
+              >
+                {playingTrack.artist}
+              </div>
             </div>
           </div>
         )}

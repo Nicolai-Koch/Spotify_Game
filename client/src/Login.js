@@ -48,14 +48,14 @@ export default function Login() {
     }
   };
 
-  //const handleLogOut = async () => {
-  //  try {
-  //    await signOut(auth);
-  //    alert("You have been logged out!");
-  //  } catch (error) {
-  //    alert(error.message);
-  //  }
-  //};
+  const handleLogOut = async () => {
+    try {
+      await signOut(auth);
+      // No need for alert, App.js will handle redirect to Login
+    } catch (error) {
+      alert(error.message);
+    }
+  };
 
   const handleSpotifyLogin = () => {
     window.location.href = AUTH_URL;
@@ -75,7 +75,8 @@ export default function Login() {
           top: "20px", 
         }}
       >
-        <h1>Spotify Game</h1>
+        <h1 className="display-4 d-none d-md-block">Spotify Game</h1>
+        <h1 className="h3 d-block d-md-none">Spotify Game</h1>
       </div>
 
       {/* Login Box */}
@@ -148,7 +149,7 @@ export default function Login() {
             <p>You are now logged in!</p>
             <button
               className="btn btn-danger w-100 mt-3"
-              //onClick={handleLogOut}
+              onClick={handleLogOut}
             >
               Log Out
             </button>

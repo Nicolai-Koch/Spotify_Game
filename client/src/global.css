@@ -22,17 +22,33 @@ h1 {
     font-style: normal;
     font-weight: 400;
     font-display: swap;
-    font-size: 70px;
+    font-size: 2.5rem;
     color: black;
     margin-top: 50px;
 }
 
-.custom-form {
-    margin-top: 150px;
+@media (min-width: 576px) {
+  h1 {
+    font-size: 3.5rem;
+  }
 }
 
-.custom-shape {
-    margin-top: 55px;
+@media (min-width: 768px) {
+  h1 {
+    font-size: 4.5rem;
+  }
+}
+
+.custom-form, .custom-shape {
+  margin-top: 2rem;
+  padding: 1rem;
+}
+
+@media (min-width: 576px) {
+  .custom-form, .custom-shape {
+    margin-top: 3rem;
+    padding: 2rem;
+  }
 }
 
 .custom-text {
@@ -59,4 +75,139 @@ h1 {
 
 .mt-3 {
     color: rgb(226, 226, 226);
+}
+
+.track-search-result {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.list-switch-btns {
+  display: none !important;
+}
+
+.scrollable-list {
+  overflow-y: auto;
+  /* Adjust height as needed; 100% for flex, or a fixed value for static layouts */
+  max-height: 50vh;
+  min-height: 0;
+  scrollbar-width: thin;
+  scrollbar-color: #181818 transparent;
+}
+
+/* Custom dark, thin scrollbar for scrollable-list */
+.scrollable-list::-webkit-scrollbar {
+  width: 6px;
+  background: transparent;
+}
+
+.scrollable-list::-webkit-scrollbar-thumb {
+  background: #181818;
+  border-radius: 4px;
+  opacity: 0.7;
+}
+
+.scrollable-list::-webkit-scrollbar-thumb:hover {
+  background: #222;
+}
+
+@media (max-width: 767.98px) {
+  .list-col {
+    flex: 0 0 45% !important;
+    max-width: 45% !important;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+  .playlists .col-md-4 {
+    max-width: 100% !important;
+  }
+  .playlists h4 {
+    font-size: 1.1rem;
+  }
+  .playlists .d-flex > div,
+  .playlists .d-flex {
+    font-size: 0.95rem;
+  }
+  .album-art {
+    height: 32px !important;
+    width: 32px !important;
+    max-width: 16vw !important;
+    margin-right: 6px !important;
+  }
+  .playing-title, .playing-artist {
+    height: 16px;
+    line-height: 16px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin: 0;
+    padding: 0;
+    font-size: 0.95em;
+    max-width: 120px; /* or whatever fits your layout */
+  }
+  .playing-artist {
+    font-size: 0.85em;
+  }
+  .playing-info-wrap {
+    height: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .requested-row {
+    gap: 4px;
+  }
+  .vote-btn {
+    padding: 2px 6px !important;   /* Less horizontal padding */
+    font-size: 0.85em !important;
+    white-space: nowrap;
+    min-width: 60px;               /* Minimum width for short text */
+    width: auto;                   /* Let it grow for longer text */
+    max-width: none;               /* No max width so text is never cut off */
+    overflow: visible;
+    text-overflow: unset;
+  }
+  .requested-row .track-search-result {
+    min-width: 0;
+    flex: 1 1 0;
+  }
+  .list-switch-btns {
+    display: flex !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .playing-info-wrap {
+    height: 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .playing-title, .playing-artist {
+    height: 24px;
+    line-height: 24px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin: 0;
+    padding: 0;
+    font-size: 1.1em;
+    max-width: 100px;
+  }
+  .playing-artist {
+    font-size: 1em;
+  }
+  .album-art {
+    height: 48px !important;
+    width: 48px !important;
+    max-width: 20vw !important;
+    margin-right: 10px !important;
+  }
+  .scrollable-list {
+    max-height: 60vh;
+  }
 }
