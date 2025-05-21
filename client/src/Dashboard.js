@@ -491,65 +491,110 @@ export default function Dashboard() {
                 Requested Songs
               </Button>
             </div>
-            <Row
-              className="mt-3 flex-grow-1 playlists"
-              style={{ overflowY: "auto" }}
-            >
+            <Row className="mt-3 flex-grow-1 playlists" style={{ overflowY: "auto" }}>
               {/* On desktop: show both lists. On mobile: show only the active one */}
-              <Col xs={12} md={4}>
-                {(activeList === "playlist" || window.innerWidth >= 768) && (
-                  <div>
-                    <h4>Current Playlist</h4>
-                    <div className="scrollable-list">
-                      {playlistTracks.map((track) => (
-                        <div
-                          key={track.id}
-                          className="d-flex justify-content-between align-items-center mb-2"
-                        >
-                          <TrackSearchResult
-                            track={{
-                              title: track.title,
-                              artist: track.artist,
-                              uri: track.uri,
-                              albumUrl: track.albumUrl,
-                            }}
-                            chooseTrack={chooseTrack}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </Col>
-              <Col xs={12} md={4}>
-                {(activeList === "requested" || window.innerWidth >= 768) && (
-                  <div>
-                    <h4>Requested Songs</h4>
-                    <div className="scrollable-list">
-                      {requestedSongs.map((track) => (
-                        <div
-                          key={track.id}
-                          className="d-flex justify-content-between align-items-center mb-2 requested-row"
-                        >
-                          <div style={{ flex: 1, minWidth: 0 }}>
+              {window.innerWidth >= 768 ? (
+                <>
+                  <Col xs={12} md={4}>
+                    <div>
+                      <h4>Current Playlist</h4>
+                      <div className="scrollable-list">
+                        {playlistTracks.map((track) => (
+                          <div
+                            key={track.id}
+                            className="d-flex justify-content-between align-items-center mb-2"
+                          >
                             <TrackSearchResult
-                              track={track}
+                              track={{
+                                title: track.title,
+                                artist: track.artist,
+                                uri: track.uri,
+                                albumUrl: track.albumUrl,
+                              }}
                               chooseTrack={chooseTrack}
                             />
                           </div>
-                          <Button
-                            className="vote-btn"
-                            variant="btn btn-success"
-                            onClick={() => voteForSong(track.id)}
-                          >
-                            Vote ({track.votes})
-                          </Button>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
-              </Col>
+                  </Col>
+                  <Col xs={12} md={4}>
+                    <div>
+                      <h4>Requested Songs</h4>
+                      <div className="scrollable-list">
+                        {requestedSongs.map((track) => (
+                          <div
+                            key={track.id}
+                            className="d-flex justify-content-between align-items-center mb-2 requested-row"
+                          >
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                              <TrackSearchResult track={track} chooseTrack={chooseTrack} />
+                            </div>
+                            <Button
+                              className="vote-btn"
+                              variant="btn btn-success"
+                              onClick={() => voteForSong(track.id)}
+                            >
+                              Vote ({track.votes})
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </Col>
+                </>
+              ) : (
+                <Col xs={12}>
+                  {activeList === "playlist" && (
+                    <div>
+                      <h4>Current Playlist</h4>
+                      <div className="scrollable-list">
+                        {playlistTracks.map((track) => (
+                          <div
+                            key={track.id}
+                            className="d-flex justify-content-between align-items-center mb-2"
+                          >
+                            <TrackSearchResult
+                              track={{
+                                title: track.title,
+                                artist: track.artist,
+                                uri: track.uri,
+                                albumUrl: track.albumUrl,
+                              }}
+                              chooseTrack={chooseTrack}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {activeList === "requested" && (
+                    <div>
+                      <h4>Requested Songs</h4>
+                      <div className="scrollable-list">
+                        {requestedSongs.map((track) => (
+                          <div
+                            key={track.id}
+                            className="d-flex justify-content-between align-items-center mb-2 requested-row"
+                          >
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                              <TrackSearchResult track={track} chooseTrack={chooseTrack} />
+                            </div>
+                            <Button
+                              className="vote-btn"
+                              variant="btn btn-success"
+                              onClick={() => voteForSong(track.id)}
+                            >
+                              Vote ({track.votes})
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </Col>
+              )}
+              {/* Leaderboard always visible */}
               <Col xs={12} md={4}>
                 <h4>Leaderboard</h4>
                 <div className="scrollable-list">
