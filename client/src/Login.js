@@ -48,14 +48,14 @@ export default function Login() {
     }
   };
 
-  const handleLogOut = async () => {
-    try {
-      await signOut(auth);
-      alert("You have been logged out!");
-    } catch (error) {
-      alert(error.message);
-    }
-  };
+  //const handleLogOut = async () => {
+  //  try {
+  //    await signOut(auth);
+  //    alert("You have been logged out!");
+  //  } catch (error) {
+  //    alert(error.message);
+  //  }
+  //};
 
   const handleSpotifyLogin = () => {
     window.location.href = AUTH_URL;
@@ -148,7 +148,7 @@ export default function Login() {
             <p>You are now logged in!</p>
             <button
               className="btn btn-danger w-100 mt-3"
-              onClick={handleLogOut}
+              //onClick={handleLogOut}
             >
               Log Out
             </button>
