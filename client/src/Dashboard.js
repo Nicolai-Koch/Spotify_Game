@@ -7,6 +7,7 @@ import { auth, db } from "./firebase-config";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import User from "./User";
 import { setDoc } from "firebase/firestore";
+import JSConfetti from "js-confetti";
 
 import {
   collection,
@@ -41,6 +42,7 @@ export default function Dashboard() {
   const [pointsBg, setPointsBg] = useState(""); // for background color
 
   const prevPointsRef = useRef();
+  const jsConfettiRef = useRef(null);
 
   function chooseTrack(track) {
     const normalizedTrack = {
@@ -223,6 +225,10 @@ export default function Dashboard() {
     return () => (cancel = true);
   }, [search, accessToken]);
 
+  useEffect(() => {
+    jsConfettiRef.current = new JSConfetti({ canvas: document.getElementById("confetti") });
+  }, []);
+
   async function voteForSong(songId) {
     if (!userData || userData.points < 5) {
       alert("Not enough points to vote");
@@ -256,6 +262,7 @@ export default function Dashboard() {
     if (updatedSong.votes >= 4) {
       try {
         await spotifyApi.addTracksToPlaylist(playlistId, [updatedSong.uri]);
+
         console.log("Song added to Spotify:", updatedSong.title);
 
         //const updatedSong = await getDoc(songRef);
@@ -267,6 +274,12 @@ export default function Dashboard() {
           albumUrl: updatedSong.albumUrl,
           timestamp: serverTimestamp(),
         });
+
+        // Trigger confetti!
+        if (jsConfettiRef.current) {
+          jsConfettiRef.current.addConfetti(); // No options = normal confetti
+        }
+
         const requesterRef = doc(db, "Users", updatedSong.userId);
         await updateDoc(requesterRef, {
           points: increment(15),
@@ -481,6 +494,19 @@ export default function Dashboard() {
           </div>
         )}
       </Container>
+      {/* Confetti canvas */}
+      <canvas
+        id="confetti"
+        style={{
+          position: "fixed",
+          width: "100vw",
+          height: "100vh",
+          top: 0,
+          left: 0,
+          zIndex: 1000,
+          pointerEvents: "none",
+        }}
+      />
     </>
   );
 }
