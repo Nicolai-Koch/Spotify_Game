@@ -228,7 +228,9 @@ export default function Dashboard() {
   }, [search, accessToken]);
 
   useEffect(() => {
-    jsConfettiRef.current = new JSConfetti({ canvas: document.getElementById("confetti") });
+    jsConfettiRef.current = new JSConfetti({
+      canvas: document.getElementById("confetti"),
+    });
   }, []);
 
   async function voteForSong(songId) {
@@ -278,7 +280,7 @@ export default function Dashboard() {
         });
 
         // Trigger confetti!
-        if(userId === updatedSong.userId) {
+        if (userId === updatedSong.userId) {
           if (jsConfettiRef.current) {
             jsConfettiRef.current.addConfetti(); // normal confetti
             setShowPromotionMessage(true);
@@ -292,6 +294,13 @@ export default function Dashboard() {
           songsPromoted: increment(1),
           timestamp: serverTimestamp(), // <-- add this line
         });
+
+        // Trigger confetti!
+        if (userId === updatedSong.userId) {
+          if (jsConfettiRef.current) {
+            jsConfettiRef.current.addConfetti(); // No options = normal confetti
+          }
+        }
 
         await deleteDoc(songRef);
       } catch (err) {
@@ -335,6 +344,31 @@ export default function Dashboard() {
     }
   }, [userData?.points]);
 
+  useEffect(() => {
+    if (!accessToken) return;
+    const fetchCurrentlyPlaying = async () => {
+      try {
+        const data = await spotifyApi.getMyCurrentPlayingTrack();
+        if (data && data.item) {
+          setPlayingTrack({
+            title: data.item.name,
+            artist: data.item.artists.map((a) => a.name).join(", "),
+            uri: data.item.uri,
+            albumUrl: data.item.album.images[0]?.url || "",
+          });
+        }
+      } catch (err) {
+        console.error("Error fetching currently playing track:", err);
+      }
+    };
+
+    fetchCurrentlyPlaying();
+
+    // Optionally, poll every 5 seconds:
+    const interval = setInterval(fetchCurrentlyPlaying, 1000);
+    return () => clearInterval(interval);
+  }, [accessToken]);
+
   const handleLogOut = async () => {
     try {
       await signOut(auth);
@@ -363,7 +397,7 @@ export default function Dashboard() {
             fontSize: "1em",
             maxWidth: "90vw",
             textAlign: "center",
-            wordBreak: "break-word"
+            wordBreak: "break-word",
           }}
         >
           🎉 Congrats! Your song promoted to Playlist
@@ -440,20 +474,27 @@ export default function Dashboard() {
           <>
             <div className="list-switch-btns d-flex justify-content-center mb-3">
               <Button
-                variant={activeList === "playlist" ? "primary" : "outline-primary"}
+                variant={
+                  activeList === "playlist" ? "primary" : "outline-primary"
+                }
                 className="me-2"
                 onClick={() => setActiveList("playlist")}
               >
                 Current Playlist
               </Button>
               <Button
-                variant={activeList === "requested" ? "primary" : "outline-primary"}
+                variant={
+                  activeList === "requested" ? "primary" : "outline-primary"
+                }
                 onClick={() => setActiveList("requested")}
               >
                 Requested Songs
               </Button>
             </div>
-            <Row className="mt-3 flex-grow-1 playlists" style={{ overflowY: "auto" }}>
+            <Row
+              className="mt-3 flex-grow-1 playlists"
+              style={{ overflowY: "auto" }}
+            >
               {/* On desktop: show both lists. On mobile: show only the active one */}
               <Col xs={12} md={4}>
                 {(activeList === "playlist" || window.innerWidth >= 768) && (
@@ -491,7 +532,10 @@ export default function Dashboard() {
                           className="d-flex justify-content-between align-items-center mb-2 requested-row"
                         >
                           <div style={{ flex: 1, minWidth: 0 }}>
-                            <TrackSearchResult track={track} chooseTrack={chooseTrack} />
+                            <TrackSearchResult
+                              track={track}
+                              chooseTrack={chooseTrack}
+                            />
                           </div>
                           <Button
                             className="vote-btn"
@@ -555,16 +599,10 @@ export default function Dashboard() {
               }}
             />
             <div className="playing-info-wrap">
-              <div
-                className="playing-title"
-                title={playingTrack.title}
-              >
+              <div className="playing-title" title={playingTrack.title}>
                 {playingTrack.title}
               </div>
-              <div
-                className="playing-artist"
-                title={playingTrack.artist}
-              >
+              <div className="playing-artist" title={playingTrack.artist}>
                 {playingTrack.artist}
               </div>
             </div>
