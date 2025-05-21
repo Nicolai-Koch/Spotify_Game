@@ -39,6 +39,8 @@ services:
       - SSL_KEY_FILE=./ssl/key.pem
       - WDS_SOCKET_PORT=${WDS_SOCKET_PORT}
       - MONGODB_URI=mongodb://mongo:27017/mydatabase
+    env_file:
+      - ./server/.env
     command: ["npm", "start"]
     restart: always
 
