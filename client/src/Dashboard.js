@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import useAuth from "./useAuth";
 import TrackSearchResult from "./TrackSearchResult";
 import { Container, Form, Button, Row, Col } from "react-bootstrap";
@@ -6,6 +6,7 @@ import SpotifyWebApi from "spotify-web-api-js";
 import { auth, db } from "./firebase-config";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import User from "./User";
+import { setDoc } from "firebase/firestore";
 
 import {
   collection,
@@ -36,6 +37,10 @@ export default function Dashboard() {
   const [userData, setUserData] = useState(null);
   const [loadingUser, setLoadingUser] = useState(true);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
+  const [leaderBoard, setLeaderBoard] = useState([]);
+  const [pointsBg, setPointsBg] = useState(""); // for background color
+
+  const prevPointsRef = useRef();
 
   function chooseTrack(track) {
     const normalizedTrack = {
@@ -69,6 +74,8 @@ export default function Dashboard() {
         setUser(currentUser); // Set the logged-in user
         setUserId(currentUser.uid); // Store the user's ID
         const userRef = doc(db, "Users", currentUser.uid);
+        setDoc(userRef, { email: currentUser.email }, { merge: true });
+
         const unsubscribeSnapshot = onSnapshot(userRef, (docSnap) => {
           if (docSnap.exists()) {
             setUserData(docSnap.data());
@@ -98,6 +105,19 @@ export default function Dashboard() {
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const songs = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       setRequestedSongs(songs);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    const q = query(
+      collection(db, "Users"),
+      orderBy("songsPromoted", "desc"),
+      orderBy("timestamp", "desc")
+    );
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const users = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      setLeaderBoard(users);
     });
     return () => unsubscribe();
   }, []);
@@ -171,7 +191,8 @@ export default function Dashboard() {
     }
     let cancel = false;
     console.log("Searching for:", search, "with token:", accessToken);
-    spotifyApi.searchTracks(search)
+    spotifyApi
+      .searchTracks(search)
       .then((res) => {
         console.log("Spotify search response:", res);
         if (cancel) return;
@@ -217,11 +238,11 @@ export default function Dashboard() {
       return;
     }
 
-    const songData = songSnap.data();
-    if (songData.userId === userId) {
-      alert("You can't vote for your own song");
-      return;
-    }
+    // const songData = songSnap.data();
+    // if (songData.userId === userId) {
+    //   alert("You can't vote for your own song");
+    //   return;
+    // }
 
     await updateDoc(userRef, { points: increment(-5) });
     await updateDoc(songRef, {
@@ -247,7 +268,11 @@ export default function Dashboard() {
           timestamp: serverTimestamp(),
         });
         const requesterRef = doc(db, "Users", updatedSong.userId);
-        await updateDoc(requesterRef, { points: increment(15) });
+        await updateDoc(requesterRef, {
+          points: increment(15),
+          songsPromoted: increment(1),
+          timestamp: serverTimestamp(), // <-- add this line
+        });
 
         await deleteDoc(songRef);
       } catch (err) {
@@ -276,14 +301,20 @@ export default function Dashboard() {
     setSearch("");
   }
 
-  const handleLogOut = async () => {
-    try {
-      await signOut(auth);
-      // Optionally, show a message or redirect
-    } catch (error) {
-      alert(error.message);
+  useEffect(() => {
+    if (userData && typeof userData.points === "number") {
+      const prevPoints = prevPointsRef.current;
+      if (prevPoints !== undefined && prevPoints !== userData.points) {
+        if (userData.points > prevPoints) {
+          setPointsBg("bg-success text-white"); // green
+        } else if (userData.points < prevPoints) {
+          setPointsBg("bg-danger text-white"); // red
+        }
+        setTimeout(() => setPointsBg(""), 2000);
+      }
+      prevPointsRef.current = userData.points;
     }
-  };
+  }, [userData?.points]);
 
   return (
     <>
@@ -307,7 +338,18 @@ export default function Dashboard() {
           {/* User's points on the right */}
           {!loadingUser && userData && (
             <div>
-              <strong>Your Points:</strong> {userData.points}
+              <strong>Your Points:</strong>{" "}
+              <span
+                id="points"
+                className={pointsBg}
+                style={{
+                  transition: "background 0.5s",
+                  borderRadius: "4px",
+                  padding: "2px 8px",
+                }}
+              >
+                {userData.points}
+              </span>
             </div>
           )}
 
@@ -382,6 +424,28 @@ export default function Dashboard() {
                   >
                     Vote ({track.votes})
                   </Button>
+                </div>
+              ))}
+            </Col>
+            <Col>
+              <h4>Leaderboard</h4>
+              {leaderBoard.map((user) => (
+                <div
+                  key={user.id}
+                  className="d-flex justify-content-between align-items-center mb-2"
+                >
+                  <div>
+                    {user.email ? (
+                      user.email.includes("@") ? (
+                        user.email.split("@")[0]
+                      ) : (
+                        user.email
+                      )
+                    ) : (
+                      <span style={{ color: "gray" }}>Unknown</span>
+                    )}
+                  </div>
+                  <div>{user.songsPromoted} songs promoted</div>
                 </div>
               ))}
             </Col>

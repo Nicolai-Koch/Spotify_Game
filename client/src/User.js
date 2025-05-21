@@ -5,6 +5,7 @@ import { db } from "./firebase-config";
 
 export default function User({ accessToken, trackUri, userId }) {
   const [points, setPoints] = useState(50);
+  const [songsPromoted, setSongsPromoted] = useState(0);
 
   useEffect(() => {
     if (!userId) return;
@@ -12,9 +13,12 @@ export default function User({ accessToken, trackUri, userId }) {
     getDoc(userRef).then((docSnap) => {
       if (docSnap.exists()) {
         setPoints(docSnap.data().points);
+        setSongsPromoted(docSnap.data().songsPromoted);
       } else {
         setDoc(userRef, { points: 50 });
+        setDoc(userRef, { songsPromoted: 0 });
         setPoints(50);
+        setSongsPromoted(0);
       }
     });
   }, [userId]);
