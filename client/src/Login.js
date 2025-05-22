@@ -13,7 +13,7 @@ import {
 const AUTH_URL =
   "https://accounts.spotify.com/authorize?client_id=2b42a9bc4cdb42b4ad90f51353e95c31&response_type=code&redirect_uri=http://localhost:3000&scope=streaming%20user-read-private%20user-read-email%20user-library-read%20user-library-modify%20user-read-playback-state%20user-modify-playback-state%20playlist-read-private%20playlist-read-collaborative%20playlist-modify-private%20playlist-modify-public";
 
-export default function Login() {
+export default function Login({ onSpotifyLogin }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
@@ -42,7 +42,6 @@ export default function Login() {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      alert("Login successful!");
     } catch (error) {
       alert(error.message);
     }
@@ -55,10 +54,6 @@ export default function Login() {
     } catch (error) {
       alert(error.message);
     }
-  };
-
-  const handleSpotifyLogin = () => {
-    window.location.href = AUTH_URL;
   };
 
   return (
@@ -164,7 +159,7 @@ export default function Login() {
           overlay={
             !user ? ( // Render the tooltip only when the button is disabled
               <Tooltip id="spotify-tooltip">
-                Login or sign up before using Spotify login
+                Login or sign up first
               </Tooltip>
             ) : <></> // Render nothing when the tooltip is not needed
           }
@@ -177,7 +172,6 @@ export default function Login() {
                 padding: "10px",
                 pointerEvents: user ? "auto" : "none", // Allow hover even when disabled
               }}
-              onClick={handleSpotifyLogin}
               disabled={!user}
             >
               <img
