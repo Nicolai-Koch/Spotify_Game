@@ -1,9 +1,11 @@
 npm-debug.log
-Dockerfile
+node_modules
+Dockerfile*
 .dockerignore
 .git
 .gitignore
 .env
+*.md
 node_modules
 build
 logs
