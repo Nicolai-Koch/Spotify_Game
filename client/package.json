@@ -18,7 +18,9 @@
     "react-spotify-web-playback": "^0.14.7",
     "spotify-web-api-js": "^1.5.2",
     "spotify-web-api-node": "^5.0.2",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "ajv": "^6.12.6",
+    "ajv-keywords": "^3.5.2"
   },
   "scripts": {
     "start": "cross-env PORT=3000 react-scripts start",
