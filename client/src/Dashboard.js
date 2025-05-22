@@ -209,6 +209,7 @@ export default function Dashboard() {
             const smallestAlbumImage = track.album.images.reduce(
               (smallest, image) =>
                 image.height < smallest.height ? image : smallest,
+
               track.album.images[0]
             );
             return {
@@ -431,6 +432,10 @@ export default function Dashboard() {
                   transition: "background 0.5s",
                   borderRadius: "4px",
                   padding: "2px 8px",
+                  fontWeight: "bold",
+                  fontFamily: "'Inter', 'Segoe UI', Arial, sans-serif",
+                  color: "#FFF5E1",
+                  fontSize: "1.1em",
                 }}
               >
                 {userData.points}
@@ -491,7 +496,10 @@ export default function Dashboard() {
                 Requested Songs
               </Button>
             </div>
-            <Row className="mt-3 flex-grow-1 playlists" style={{ overflowY: "auto" }}>
+            <Row
+              className="mt-3 flex-grow-1 playlists"
+              style={{ overflowY: "auto" }}
+            >
               {/* On desktop: show both lists. On mobile: show only the active one */}
               {window.innerWidth >= 768 ? (
                 <>
@@ -527,8 +535,18 @@ export default function Dashboard() {
                             key={track.id}
                             className="d-flex justify-content-between align-items-center mb-2 requested-row"
                           >
-                            <div style={{ flex: 1, minWidth: 0 }}>
-                              <TrackSearchResult track={track} chooseTrack={chooseTrack} />
+                            <div
+                              style={{
+                                flex: 1,
+                                minWidth: 0,
+                                fontStyle: "italic",
+                                color: "#FFAD60",
+                              }}
+                            >
+                              <TrackSearchResult
+                                track={track}
+                                chooseTrack={chooseTrack}
+                              />
                             </div>
                             <Button
                               className="vote-btn"
@@ -578,7 +596,10 @@ export default function Dashboard() {
                             className="d-flex justify-content-between align-items-center mb-2 requested-row"
                           >
                             <div style={{ flex: 1, minWidth: 0 }}>
-                              <TrackSearchResult track={track} chooseTrack={chooseTrack} />
+                              <TrackSearchResult
+                                track={track}
+                                chooseTrack={chooseTrack}
+                              />
                             </div>
                             <Button
                               className="vote-btn"

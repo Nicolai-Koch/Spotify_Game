@@ -1,15 +1,36 @@
 /* Import Google Font */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap'); /* Pixel font */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"); /* Pixel font */
 
-body, html {
+body,
+html {
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden; 
-  background: linear-gradient(to bottom, #d11e1e, #191414); /* Spotify-like gradient */
-  font-family: 'Poppins', sans-serif; 
+  overflow: hidden;
+  background: linear-gradient(
+    to bottom,
+    #d11e1e,
+    #191414
+  ); /* Spotify-like gradient */
+  font-family: "Poppins", sans-serif;
+}
+
+body,
+.container,
+.playlists,
+.scrollable-list {
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  color: #222; /* dark gray for readability */
+}
+h4 {
+  font-weight: 700;
+  color: white; /* Spotify green for section titles */
+  letter-spacing: 0.5px;
+}
+strong {
+  color: white;
 }
 
 #root {
@@ -18,13 +39,13 @@ body, html {
 }
 
 h1 {
-    font-family: 'Press Start 2P';
-    font-style: normal;
-    font-weight: 400;
-    font-display: swap;
-    font-size: 2.5rem;
-    color: black;
-    margin-top: 50px;
+  font-family: "Press Start 2P";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  font-size: 2.5rem;
+  color: black;
+  margin-top: 50px;
 }
 
 @media (min-width: 576px) {
@@ -39,25 +60,27 @@ h1 {
   }
 }
 
-.custom-form, .custom-shape {
+.custom-form,
+.custom-shape {
   margin-top: 2rem;
   padding: 1rem;
 }
 
 @media (min-width: 576px) {
-  .custom-form, .custom-shape {
+  .custom-form,
+  .custom-shape {
     margin-top: 3rem;
     padding: 2rem;
   }
 }
 
 .custom-text {
-    color: rgb(226, 226, 226);
-    margin: 0;
+  color: rgb(226, 226, 226);
+  margin: 0;
 }
 
 .text-center {
-    color: rgb(226, 226, 226);
+  color: rgb(226, 226, 226);
 }
 
 .tooltip-arrow {
@@ -65,16 +88,16 @@ h1 {
 }
 
 .align-items-center {
-    margin-top: 10px;
-    color: rgb(226, 226, 226);
+  margin-top: 10px;
+  color: rgb(226, 226, 226);
 }
 
 .playlists {
-    color: rgb(226, 226, 226);
+  color: rgb(226, 226, 226);
 }
 
 .mt-3 {
-    color: rgb(226, 226, 226);
+  color: rgb(226, 226, 226);
 }
 
 .track-search-result {
@@ -135,8 +158,10 @@ h1 {
     width: 32px !important;
     max-width: 16vw !important;
     margin-right: 6px !important;
+    border-radius: "4px";
   }
-  .playing-title, .playing-artist {
+  .playing-title,
+  .playing-artist {
     height: 16px;
     line-height: 16px;
     overflow: hidden;
@@ -161,12 +186,12 @@ h1 {
     gap: 4px;
   }
   .vote-btn {
-    padding: 2px 6px !important;   /* Less horizontal padding */
+    padding: 2px 6px !important; /* Less horizontal padding */
     font-size: 0.85em !important;
     white-space: nowrap;
-    min-width: 60px;               /* Minimum width for short text */
-    width: auto;                   /* Let it grow for longer text */
-    max-width: none;               /* No max width so text is never cut off */
+    min-width: 60px; /* Minimum width for short text */
+    width: auto; /* Let it grow for longer text */
+    max-width: none; /* No max width so text is never cut off */
     overflow: visible;
     text-overflow: unset;
   }
@@ -187,7 +212,8 @@ h1 {
     justify-content: center;
     overflow: hidden;
   }
-  .playing-title, .playing-artist {
+  .playing-title,
+  .playing-artist {
     height: 24px;
     line-height: 24px;
     overflow: hidden;
@@ -206,6 +232,7 @@ h1 {
     width: 48px !important;
     max-width: 20vw !important;
     margin-right: 10px !important;
+    border-radius: "4px";
   }
   .scrollable-list {
     max-height: 60vh;
