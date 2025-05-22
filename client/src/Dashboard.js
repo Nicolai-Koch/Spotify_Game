@@ -8,6 +8,7 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import User from "./User";
 import { setDoc } from "firebase/firestore";
 import JSConfetti from "js-confetti";
+import { where } from "firebase/firestore";
 
 import {
   collection,
@@ -295,13 +296,21 @@ export default function Dashboard() {
           songsPromoted: increment(1),
           timestamp: serverTimestamp(), // <-- add this line
         });
-
+        console.log("Confetti check:", {
+          userId,
+          updatedSongUserId: updatedSong.userId,
+        });
         // Trigger confetti!
         if (userId === updatedSong.userId) {
           if (jsConfettiRef.current) {
             jsConfettiRef.current.addConfetti(); // No options = normal confetti
           }
         }
+
+        await updateDoc(songRef, {
+          promoted: true,
+          promotedAt: serverTimestamp(),
+        });
 
         await deleteDoc(songRef);
       } catch (err) {
@@ -378,6 +387,35 @@ export default function Dashboard() {
       alert(error.message);
     }
   };
+
+  useEffect(() => {
+    if (!userId) return;
+    const q = query(
+      collection(db, "RequestedSongs"),
+      where("userId", "==", userId),
+      where("promoted", "==", true)
+    );
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      snapshot.docChanges().forEach((change) => {
+        if (change.type === "added" || change.type === "modified") {
+          const song = change.doc.data();
+          // Only trigger confetti if promotedAt is recent (e.g., last 10 seconds)
+          if (
+            song.promotedAt &&
+            song.promotedAt.toDate &&
+            Date.now() - song.promotedAt.toDate().getTime() < 10000
+          ) {
+            if (jsConfettiRef.current) {
+              jsConfettiRef.current.addConfetti();
+              setShowPromotionMessage(true);
+              setTimeout(() => setShowPromotionMessage(false), 3000);
+            }
+          }
+        }
+      });
+    });
+    return () => unsubscribe();
+  }, [userId]);
 
   return (
     <>
