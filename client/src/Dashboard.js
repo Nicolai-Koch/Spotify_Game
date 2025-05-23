@@ -22,6 +22,7 @@ import {
   serverTimestamp,
   getDoc,
   deleteDoc,
+  getDocs,
 } from "firebase/firestore";
 
 const spotifyApi = new SpotifyWebApi();
@@ -46,6 +47,7 @@ export default function Dashboard() {
 
   const prevPointsRef = useRef();
   const jsConfettiRef = useRef(null);
+  const prevPlayingTrackRef = useRef();
 
   function chooseTrack(track) {
     const normalizedTrack = {
@@ -417,6 +419,40 @@ export default function Dashboard() {
     return () => unsubscribe();
   }, [userId]);
 
+  useEffect(() => {
+    // Only run if there was a previous track and it changed
+    if (
+      prevPlayingTrackRef.current &&
+      playingTrack &&
+      prevPlayingTrackRef.current.uri !== playingTrack.uri
+    ) {
+      removeSongFromFirebaseAndSpotify(prevPlayingTrackRef.current);
+    }
+    prevPlayingTrackRef.current = playingTrack;
+  }, [playingTrack]);
+
+  async function removeSongFromFirebaseAndSpotify(track) {
+    try {
+      // Remove from Firestore Playlist
+      const q = query(
+        collection(db, "Playlist"),
+        where("uri", "==", track.uri)
+      );
+      const snapshot = await getDocs(q);
+      snapshot.forEach(async (docSnap) => {
+        await deleteDoc(docSnap.ref);
+      });
+
+      // Remove from Spotify Playlist
+      await spotifyApi.removeTracksFromPlaylist(playlistId, [
+        { uri: track.uri },
+      ]);
+      console.log("Removed song from Firebase and Spotify:", track.title);
+    } catch (err) {
+      console.error("Failed to remove song from Firebase/Spotify:", err);
+    }
+  }
+
   return (
     <>
       {showPromotionMessage && (
@@ -786,7 +822,7 @@ export default function Dashboard() {
                     width: "70px",
                     maxWidth: "40vw",
                     marginRight: "10px",
-                    borderRadius: "4px",
+                    borderRadius: "12px",
                   }}
                 />
                 <div className="playing-info-wrap">
