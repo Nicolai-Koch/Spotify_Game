@@ -71,7 +71,7 @@ export default function Login({ onSpotifyLogin }) {
         }}
       >
         <h1 className="display-4 d-none d-md-block">Spotify Game</h1>
-        <h1 className="h3 d-block d-md-none">Spotify Game</h1>
+        <h1 className="h1 d-block d-md-none">Spotify Game</h1>
       </div>
 
       {/* Login Box */}
@@ -166,11 +166,11 @@ export default function Login({ onSpotifyLogin }) {
         >
           <span className="d-inline-block w-100">
             <button
-              className="btn btn-success btn-lg w-100 shadow d-flex align-items-center justify-content-center"
+              className="btn btn-success btn-lg shadow d-flex align-items-center justify-content-center spotify-login-btn"
               style={{
                 margin: "0px",
                 padding: "10px",
-                pointerEvents: user ? "auto" : "none", // Allow hover even when disabled
+                pointerEvents: user ? "auto" : "none",
               }}
               disabled={!user}
             >

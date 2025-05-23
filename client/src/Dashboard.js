@@ -687,7 +687,7 @@ export default function Dashboard() {
                     </div>
                   )}
                   {activeList === "requested" && (
-                    <div className="blurred-bg mb-4">
+                    <div className="blurred-bg h-100 d-flex flex-column">
                       <h4>Requested Songs</h4>
                       <div className="scrollable-list">
                         {requestedSongs.map((track) => (

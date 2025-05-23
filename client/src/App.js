@@ -40,12 +40,12 @@ function App() {
         }}
       >
         <h1 className="display-4 d-none d-md-block">Spotify Game</h1>
-        <h1 className="h3 d-block d-md-none">Spotify Game</h1>
+        <h1 className="h1 d-block d-md-none">Spotify Game</h1>
       </div>
       <h2 className="mb-4" style={{ marginTop: "100px" }}>Welcome, {user.email.split("@")[0]}</h2>
-      <div style={{ maxWidth: "400px", width: "100%" }}>
+      <div className="mx-auto" style={{ maxWidth: "400px" }}>
         <button
-          className="btn btn-success btn-lg w-100 shadow d-flex align-items-center justify-content-center"
+          className="btn btn-success btn-lg shadow d-flex align-items-center justify-content-center spotify-login-btn"
           style={{
             margin: "0px",
             padding: "10px",
