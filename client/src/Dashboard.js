@@ -608,12 +608,40 @@ export default function Dashboard() {
                       <div className="blurred-bg h-100 d-flex flex-column">
                         <h4>Leaderboard</h4>
                         <div className="scrollable-list flex-grow-1">
-                          {leaderBoard.map((user) => (
+                          {leaderBoard.map((user, idx) => (
                             <div
                               key={user.id}
                               className="d-flex justify-content-between align-items-center mb-2"
                             >
-                              <div>
+                              {/* Position/Medal column */}
+                              <div
+                                style={{
+                                  width: 48,
+                                  textAlign: "center",
+                                  fontSize: "1.8em",
+                                  flexShrink: 0,
+                                }}
+                              >
+                                {idx === 0
+                                  ? "🥇"
+                                  : idx === 1
+                                  ? "🥈"
+                                  : idx === 2
+                                  ? "🥉"
+                                  : idx + 1}
+                              </div>
+                              {/* User name */}
+                              <div
+                                style={{
+                                  textAlign: "left",
+                                  marginLeft: 12, // Add some space from the medal/position
+                                  flex: 1, // Take up remaining space
+                                  minWidth: 0,
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                  whiteSpace: "nowrap",
+                                }}
+                              >
                                 {user.email ? (
                                   user.email.includes("@") ? (
                                     user.email.split("@")[0]
@@ -624,6 +652,7 @@ export default function Dashboard() {
                                   <span style={{ color: "gray" }}>Unknown</span>
                                 )}
                               </div>
+                              {/* Songs promoted */}
                               <div>{user.songsPromoted} songs promoted</div>
                             </div>
                           ))}
@@ -688,12 +717,38 @@ export default function Dashboard() {
                     <div className="blurred-bg">
                       <h4>Leaderboard</h4>
                       <div className="scrollable-list">
-                        {leaderBoard.map((user) => (
+                        {leaderBoard.map((user, idx) => (
                           <div
                             key={user.id}
                             className="d-flex justify-content-between align-items-center mb-2"
                           >
-                            <div>
+                            <div
+                              style={{
+                                width: 48,
+                                textAlign: "center",
+                                fontSize: "1.8em",
+                                flexShrink: 0,
+                              }}
+                            >
+                              {idx === 0
+                                ? "🥇"
+                                : idx === 1
+                                ? "🥈"
+                                : idx === 2
+                                ? "🥉"
+                                : idx + 1}
+                            </div>
+                            <div
+                              style={{
+                                textAlign: "left",
+                                marginLeft: 12,
+                                flex: 1,
+                                minWidth: 0,
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                whiteSpace: "nowrap",
+                              }}
+                            >
                               {user.email ? (
                                 user.email.includes("@") ? (
                                   user.email.split("@")[0]
