@@ -531,7 +531,7 @@ export default function Dashboard() {
         />
 
         {search && (
-          <div className="my-2" style={{ overflowY: "auto" }}>
+          <div className="my-2 scrollable-list" style={{ overflowY: "auto" }}>
             {searchResults.map((track) => (
               <div
                 key={track.uri}
