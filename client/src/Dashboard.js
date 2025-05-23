@@ -252,11 +252,11 @@ export default function Dashboard() {
       return;
     }
 
-    // const songData = songSnap.data();
-    // if (songData.userId === userId) {
-    //   alert("You can't vote for your own song");
-    //   return;
-    // }
+    const songData = songSnap.data();
+    if (songData.userId === userId) {
+      alert("You can't vote for your own song");
+      return;
+    }
 
     await updateDoc(userRef, { points: increment(-5) });
     await updateDoc(songRef, {
@@ -544,6 +544,7 @@ export default function Dashboard() {
                   onClick={() => requestSong(track)}
                 >
                   Request
+
                 </Button>
               </div>
             ))}
@@ -667,7 +668,7 @@ export default function Dashboard() {
                                 />
                               </div>
                               <Button
-                                className="vote-btn"
+                                className="vote-btn modern-vote-btn"
                                 variant="btn btn-success"
                                 onClick={() => voteForSong(track.id)}
                               >
