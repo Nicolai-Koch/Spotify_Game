@@ -143,11 +143,11 @@ h1 {
   height: 110%;
   background: rgba(30, 30, 30, 0.45);
   border-radius: 18px;
-  box-shadow: 0 4px 24px 0 rgba(0,0,0,0.10);
+  box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   padding: 18px 16px 0px 16px;
-  border: 1px solid rgba(255,255,255,0.12);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   display: flex;
   flex-direction: column;
 }
@@ -179,7 +179,7 @@ h1 {
   width: 60px !important;
   max-width: 20vw !important;
   margin-right: 10px !important;
-  border-radius: 4px !important;
+  border-radius: 12px !important;
 }
 
 @media (max-width: 767.98px) {
@@ -263,13 +263,13 @@ h1 {
     width: 60px !important;
     max-width: 20vw !important;
     margin-right: 10px !important;
-    border-radius: 4px !important;
+    border-radius: 12px !important;
   }
   .scrollable-list {
     flex: 1 1 0;
     min-height: 0;
     overflow-y: auto;
-    max-height: unset; 
+    max-height: unset;
   }
   .playlists .row {
     height: 60vh;
