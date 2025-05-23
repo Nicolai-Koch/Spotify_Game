@@ -525,6 +525,7 @@ export default function Dashboard() {
 
         <Form.Control
           type="search"
+          style={{ marginBottom: "10px" }}
           placeholder="Search Songs/Artists"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -557,26 +558,59 @@ export default function Dashboard() {
                   activeList === "playlist" ? "primary" : "outline-primary"
                 }
                 className="me-2"
+                style={{
+                  backgroundColor: "#611e1f",
+                  borderColor: "#000",
+                  color: activeList === "playlist" ? "#fff" : "#F27D46",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  minWidth: 110,
+                }}
                 onClick={() => setActiveList("playlist")}
               >
-                Current Playlist
+                <span style={{ fontSize: "2em", lineHeight: 1 }}>🎵</span>
+                <span style={{ fontSize: "1em" }}>Playlist</span>
               </Button>
               <Button
                 variant={
                   activeList === "requested" ? "primary" : "outline-primary"
                 }
                 className="me-2"
+                style={{
+                  backgroundColor: "#611e1f",
+                  borderColor: "#000",
+                  color: activeList === "requested" ? "#fff" : "#F27D46",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  minWidth: 110,
+                }}
                 onClick={() => setActiveList("requested")}
               >
-                Requested Songs
+                <span style={{ fontSize: "2em", lineHeight: 1 }}>🙋‍♂️🎶</span>
+                <span style={{ fontSize: "1em" }}>Requests</span>
               </Button>
               <Button
                 variant={
                   activeList === "leaderboard" ? "primary" : "outline-primary"
                 }
+                style={{
+                  backgroundColor: "#611e1f",
+                  borderColor: "#000",
+                  color: activeList === "leaderboard" ? "#fff" : "#F27D46",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  minWidth: 110,
+                }}
                 onClick={() => setActiveList("leaderboard")}
               >
-                Leaderboard
+                <span style={{ fontSize: "2em", lineHeight: 1 }}>🏆</span>
+                <span style={{ fontSize: "1em" }}>Rankings</span>
               </Button>
             </div>
             <Row
