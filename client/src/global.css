@@ -228,8 +228,7 @@ h1 {
   .blurred-bg {
     display: flex;
     flex-direction: column; 
-    min-height: 350px; /* Adjusted height for mobile */
-    max-height: 350px;
+    
   }
   .scrollable-list {
     overflow-y: auto;

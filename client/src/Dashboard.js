@@ -498,7 +498,7 @@ export default function Dashboard() {
           {/* User's points on the right */}
           {!loadingUser && userData && (
             <div>
-              <strong>Your Points:</strong>{" "}
+              <strong>Points:</strong>{" "}
               <span
                 id="points"
                 className={pointsBg}
@@ -561,12 +561,14 @@ export default function Dashboard() {
                 style={{
                   backgroundColor: "#611e1f",
                   borderColor: "#000",
-                  color: activeList === "playlist" ? "#fff" : "#F27D46",
+                  color: activeList === "playlist" ? "#fff" : "#b0b0b0",
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
                   justifyContent: "center",
                   minWidth: 110,
+                  boxShadow: "0 14px 34px rgba(0,0,0,0.25), 0 1.5px 8px rgba(30,30,30,0.18)",
+                  
                 }}
                 onClick={() => setActiveList("playlist")}
               >
@@ -581,12 +583,13 @@ export default function Dashboard() {
                 style={{
                   backgroundColor: "#611e1f",
                   borderColor: "#000",
-                  color: activeList === "requested" ? "#fff" : "#F27D46",
+                  color: activeList === "requested" ? "#fff" : "#b0b0b0",
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
                   justifyContent: "center",
                   minWidth: 110,
+                  boxShadow: "0 14px 34px rgba(0,0,0,0.25), 0 1.5px 8px rgba(30,30,30,0.18)",
                 }}
                 onClick={() => setActiveList("requested")}
               >
@@ -600,12 +603,13 @@ export default function Dashboard() {
                 style={{
                   backgroundColor: "#611e1f",
                   borderColor: "#000",
-                  color: activeList === "leaderboard" ? "#fff" : "#F27D46",
+                  color: activeList === "leaderboard" ? "#fff" : "#b0b0b0",
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
                   justifyContent: "center",
                   minWidth: 110,
+                  boxShadow: "0 14px 34px rgba(0,0,0,0.25), 0 1.5px 8px rgba(30,30,30,0.18)",
                 }}
                 onClick={() => setActiveList("leaderboard")}
               >
