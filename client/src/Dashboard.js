@@ -552,7 +552,7 @@ export default function Dashboard() {
 
         {!search && (
           <>
-            <div className="list-switch-btns d-flex justify-content-center mb-3">
+            <div className="list-switch-btns d-flex justify-content-center">
               <Button
                 variant={
                   activeList === "playlist" ? "primary" : "outline-primary"
@@ -734,7 +734,7 @@ export default function Dashboard() {
 
                 <div className="d-md-none">
                   {activeList === "playlist" && (
-                    <div className="blurred-bg mb-4">
+                    <div className="blurred-bg">
                       <h4>Current Playlist</h4>
                       <div className="scrollable-list">
                         {playlistTracks.map((track) => (

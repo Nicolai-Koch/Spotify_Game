@@ -221,12 +221,15 @@ h1 {
   }
   .list-switch-btns {
     display: flex !important;
+    justify-content: center;
+    align-items: center;
+    margin-top: 9px;
   }
   .blurred-bg {
     display: flex;
     flex-direction: column; 
-    min-height: 400px; /* Adjusted height for mobile */
-    max-height: 400px;
+    min-height: 350px; /* Adjusted height for mobile */
+    max-height: 350px;
   }
   .scrollable-list {
     overflow-y: auto;
@@ -300,6 +303,9 @@ h1 {
     display: flex;
     flex-direction: column;
   }
+  .now-playing-bar {
+    display: none !important;
+  }
 }
 
 .spotify-login-btn {
@@ -314,37 +320,61 @@ h1 {
 
 .now-playing-bar {
   position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  left: 12px;
+  right: 12px;
+  bottom: 16px;
   z-index: 1050;
-  background: rgba(30, 30, 30, 0.98);
+  background: linear-gradient(90deg, #232526 0%, #191414 100%);
   color: #fff;
   display: flex;
   align-items: center;
-  padding: 8px 14px 8px 8px;
-  box-shadow: 0 -2px 12px rgba(0,0,0,0.18);
-  min-height: 60px;
+  padding: 10px 18px 10px 10px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.25), 0 1.5px 8px rgba(30,30,30,0.18);
+  min-height: 64px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.07);
+  transition: box-shadow 0.2s;
+  gap: 12px;
 }
 
 .now-playing-bar .album-art {
   height: 48px !important;
   width: 48px !important;
+  min-width: 48px !important;
   margin-right: 10px !important;
-  border-radius: 10px !important;
+  border-radius: 12px !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  object-fit: cover;
+  background: #222;
 }
 
 .now-playing-bar .playing-info-wrap {
   flex: 1;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.now-playing-bar .playing-title,
-.now-playing-bar .playing-artist {
+.now-playing-bar .playing-title {
   color: #fff;
-  font-size: 1em;
+  font-size: 1.08em;
+  font-weight: 600;
   line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  letter-spacing: 0.01em;
+}
+
+.now-playing-bar .playing-artist {
+  color: #b3b3b3;
+  font-size: 0.98em;
+  font-weight: 400;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 1px;
+  letter-spacing: 0.01em;
 }
