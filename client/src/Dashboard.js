@@ -872,7 +872,23 @@ export default function Dashboard() {
           </>
         )}
       </Container>
-      {/* Confetti canvas */}
+      {playingTrack && (
+        <div className="now-playing-bar">
+          <img
+            src={playingTrack.albumUrl}
+            alt="Album Art"
+            className="album-art"
+          />
+          <div className="playing-info-wrap">
+            <div className="playing-title" title={playingTrack.title}>
+              {playingTrack.title}
+            </div>
+            <div className="playing-artist" title={playingTrack.artist}>
+              {playingTrack.artist}
+            </div>
+          </div>
+        </div>
+      )}
       <canvas
         id="confetti"
         style={{

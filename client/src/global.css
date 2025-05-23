@@ -311,3 +311,40 @@ h1 {
 .btn-outline-success {
   margin-right: 10px;
 }
+
+.now-playing-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1050;
+  background: rgba(30, 30, 30, 0.98);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  padding: 8px 14px 8px 8px;
+  box-shadow: 0 -2px 12px rgba(0,0,0,0.18);
+  min-height: 60px;
+}
+
+.now-playing-bar .album-art {
+  height: 48px !important;
+  width: 48px !important;
+  margin-right: 10px !important;
+  border-radius: 10px !important;
+}
+
+.now-playing-bar .playing-info-wrap {
+  flex: 1;
+  min-width: 0;
+}
+
+.now-playing-bar .playing-title,
+.now-playing-bar .playing-artist {
+  color: #fff;
+  font-size: 1em;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
