@@ -153,7 +153,7 @@ export default function Login({ onSpotifyLogin }) {
       )}
 
       {/* Login with Spotify */}
-      <div className="w-100 mt-2" style={{ maxWidth: "400px" }}>
+      <div className="w-100 mt-2 d-flex justify-content-center" style={{ maxWidth: "400px" }}>
         <OverlayTrigger
           placement="bottom" // Tooltip position
           overlay={
@@ -164,7 +164,7 @@ export default function Login({ onSpotifyLogin }) {
             ) : <></> // Render nothing when the tooltip is not needed
           }
         >
-          <span className="d-inline-block w-100">
+          <span>
             <button
               className="btn btn-success btn-lg shadow d-flex align-items-center justify-content-center spotify-login-btn"
               style={{
