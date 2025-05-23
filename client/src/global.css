@@ -113,14 +113,11 @@ h1 {
 
 .scrollable-list {
   overflow-y: auto;
-  /* Adjust height as needed; 100% for flex, or a fixed value for static layouts */
-  max-height: 50vh;
-  min-height: 0;
+  max-height: 400px;
   scrollbar-width: thin;
   scrollbar-color: #181818 transparent;
 }
 
-/* Custom dark, thin scrollbar for scrollable-list */
 .scrollable-list::-webkit-scrollbar {
   width: 6px;
   background: transparent;
@@ -134,6 +131,48 @@ h1 {
 
 .scrollable-list::-webkit-scrollbar-thumb:hover {
   background: #222;
+}
+
+.blurred-bg {
+  background: rgba(30, 30, 30, 0.45);
+  border-radius: 18px;
+  box-shadow: 0 4px 24px 0 rgba(0,0,0,0.10);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 18px 16px 0px 16px;
+  border: 1px solid rgba(255,255,255,0.12);
+  display: flex;
+  flex-direction: column;
+}
+
+.playing-info-wrap {
+  height: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+.playing-title,
+.playing-artist {
+  height: 24px;
+  line-height: 24px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: 0;
+  padding: 0;
+  font-size: 1.1em;
+  max-width: 100px;
+}
+.playing-artist {
+  font-size: 1em;
+}
+.album-art {
+  height: 60px !important;
+  width: 60px !important;
+  max-width: 20vw !important;
+  margin-right: 10px !important;
+  border-radius: 4px !important;
 }
 
 @media (max-width: 767.98px) {
@@ -152,35 +191,6 @@ h1 {
   .playlists .d-flex > div,
   .playlists .d-flex {
     font-size: 0.95rem;
-  }
-  .album-art {
-    height: 32px !important;
-    width: 32px !important;
-    max-width: 16vw !important;
-    margin-right: 6px !important;
-    border-radius: "4px";
-  }
-  .playing-title,
-  .playing-artist {
-    height: 16px;
-    line-height: 16px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    margin: 0;
-    padding: 0;
-    font-size: 0.95em;
-    max-width: 120px; /* or whatever fits your layout */
-  }
-  .playing-artist {
-    font-size: 0.85em;
-  }
-  .playing-info-wrap {
-    height: 32px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    overflow: hidden;
   }
   .requested-row {
     gap: 4px;
@@ -201,6 +211,20 @@ h1 {
   }
   .list-switch-btns {
     display: flex !important;
+  }
+  .blurred-bg {
+    display: flex;
+    flex-direction: column;
+  }
+  .scrollable-list {
+    overflow-y: auto;
+  }
+  .playlists {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 0;
+    min-height: 0;
+    height: 100%;
   }
 }
 
@@ -228,13 +252,36 @@ h1 {
     font-size: 1em;
   }
   .album-art {
-    height: 48px !important;
-    width: 48px !important;
+    height: 60px !important;
+    width: 60px !important;
     max-width: 20vw !important;
     margin-right: 10px !important;
-    border-radius: "4px";
+    border-radius: 4px !important;
   }
   .scrollable-list {
-    max-height: 60vh;
+    flex: 1 1 0;
+    min-height: 0;
+    overflow-y: auto;
+    max-height: unset; 
+  }
+  .playlists .row {
+    height: 60vh;
+    display: flex;
+  }
+  .playlists .col-md-4 {
+    display: flex;
+    flex-direction: column;
+    height: 110%;
+  }
+  .playlists > .row > .col-12 {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .blurred-bg {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
   }
 }

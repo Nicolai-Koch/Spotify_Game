@@ -529,80 +529,113 @@ export default function Dashboard() {
                 variant={
                   activeList === "requested" ? "primary" : "outline-primary"
                 }
+                className="me-2"
                 onClick={() => setActiveList("requested")}
               >
                 Requested Songs
               </Button>
+              <Button
+                variant={
+                  activeList === "leaderboard" ? "primary" : "outline-primary"
+                }
+                onClick={() => setActiveList("leaderboard")}
+              >
+                Leaderboard
+              </Button>
             </div>
             <Row
               className="mt-3 flex-grow-1 playlists"
-              style={{ overflowY: "auto" }}
+              style={{
+                flex: 1,
+                minHeight: 0,
+                overflowY: "auto",
+              }}
             >
-              {/* On desktop: show both lists. On mobile: show only the active one */}
-              {window.innerWidth >= 768 ? (
-                <>
-                  <Col xs={12} md={4}>
-                    <div>
-                      <h4>Current Playlist</h4>
-                      <div className="scrollable-list">
-                        {playlistTracks.map((track) => (
-                          <div
-                            key={track.id}
-                            className="d-flex justify-content-between align-items-center mb-2"
-                          >
-                            <TrackSearchResult
-                              track={{
-                                title: track.title,
-                                artist: track.artist,
-                                uri: track.uri,
-                                albumUrl: track.albumUrl,
-                              }}
-                              chooseTrack={chooseTrack}
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </Col>
-                  <Col xs={12} md={4}>
-                    <div>
-                      <h4>Requested Songs</h4>
-                      <div className="scrollable-list">
-                        {requestedSongs.map((track) => (
-                          <div
-                            key={track.id}
-                            className="d-flex justify-content-between align-items-center mb-2 requested-row"
-                          >
+              <Col xs={12}>
+                <div className="d-none d-md-block">
+                  <Row className="g-4">
+                    <Col md={4}>
+                      <div className="blurred-bg h-100 d-flex flex-column">
+                        <h4>Current Playlist</h4>
+                        <div className="scrollable-list flex-grow-1">
+                          {playlistTracks.map((track) => (
                             <div
-                              style={{
-                                flex: 1,
-                                minWidth: 0,
-                                fontStyle: "italic",
-                                color: "#FFAD60",
-                              }}
+                              key={track.id}
+                              className="d-flex justify-content-between align-items-center mb-2"
                             >
                               <TrackSearchResult
-                                track={track}
+                                track={{
+                                  title: track.title,
+                                  artist: track.artist,
+                                  uri: track.uri,
+                                  albumUrl: track.albumUrl,
+                                }}
                                 chooseTrack={chooseTrack}
                               />
                             </div>
-                            <Button
-                              className="vote-btn"
-                              variant="btn btn-success"
-                              onClick={() => voteForSong(track.id)}
-                            >
-                              Vote ({track.votes})
-                            </Button>
-                          </div>
-                        ))}
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  </Col>
-                </>
-              ) : (
-                <Col xs={12}>
+                    </Col>
+                    <Col md={4}>
+                      <div className="blurred-bg h-100 d-flex flex-column">
+                        <h4>Requested Songs</h4>
+                        <div className="scrollable-list flex-grow-1">
+                          {requestedSongs.map((track) => (
+                            <div
+                              key={track.id}
+                              className="d-flex justify-content-between align-items-center mb-2 requested-row"
+                            >
+                              <div style={{ flex: 1, minWidth: 0 }}>
+                                <TrackSearchResult
+                                  track={track}
+                                  chooseTrack={chooseTrack}
+                                />
+                              </div>
+                              <Button
+                                className="vote-btn"
+                                variant="btn btn-success"
+                                onClick={() => voteForSong(track.id)}
+                              >
+                                Vote ({track.votes})
+                              </Button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </Col>
+                    <Col md={4}>
+                      <div className="blurred-bg h-100 d-flex flex-column">
+                        <h4>Leaderboard</h4>
+                        <div className="scrollable-list flex-grow-1">
+                          {leaderBoard.map((user) => (
+                            <div
+                              key={user.id}
+                              className="d-flex justify-content-between align-items-center mb-2"
+                            >
+                              <div>
+                                {user.email ? (
+                                  user.email.includes("@") ? (
+                                    user.email.split("@")[0]
+                                  ) : (
+                                    user.email
+                                  )
+                                ) : (
+                                  <span style={{ color: "gray" }}>Unknown</span>
+                                )}
+                              </div>
+                              <div>{user.songsPromoted} songs promoted</div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </Col>
+                  </Row>
+                </div>
+
+                <div className="d-md-none">
                   {activeList === "playlist" && (
-                    <div>
+                    <div className="blurred-bg mb-4">
                       <h4>Current Playlist</h4>
                       <div className="scrollable-list">
                         {playlistTracks.map((track) => (
@@ -625,7 +658,7 @@ export default function Dashboard() {
                     </div>
                   )}
                   {activeList === "requested" && (
-                    <div>
+                    <div className="blurred-bg mb-4">
                       <h4>Requested Songs</h4>
                       <div className="scrollable-list">
                         {requestedSongs.map((track) => (
@@ -651,66 +684,67 @@ export default function Dashboard() {
                       </div>
                     </div>
                   )}
-                </Col>
-              )}
-              {/* Leaderboard always visible */}
-              <Col xs={12} md={4}>
-                <h4>Leaderboard</h4>
-                <div className="scrollable-list">
-                  {leaderBoard.map((user) => (
-                    <div
-                      key={user.id}
-                      className="d-flex justify-content-between align-items-center mb-2"
-                    >
-                      <div>
-                        {user.email ? (
-                          user.email.includes("@") ? (
-                            user.email.split("@")[0]
-                          ) : (
-                            user.email
-                          )
-                        ) : (
-                          <span style={{ color: "gray" }}>Unknown</span>
-                        )}
+                  {activeList === "leaderboard" && (
+                    <div className="blurred-bg">
+                      <h4>Leaderboard</h4>
+                      <div className="scrollable-list">
+                        {leaderBoard.map((user) => (
+                          <div
+                            key={user.id}
+                            className="d-flex justify-content-between align-items-center mb-2"
+                          >
+                            <div>
+                              {user.email ? (
+                                user.email.includes("@") ? (
+                                  user.email.split("@")[0]
+                                ) : (
+                                  user.email
+                                )
+                              ) : (
+                                <span style={{ color: "gray" }}>Unknown</span>
+                              )}
+                            </div>
+                            <div>{user.songsPromoted} songs promoted</div>
+                          </div>
+                        ))}
                       </div>
-                      <div>{user.songsPromoted} songs promoted</div>
                     </div>
-                  ))}
+                  )}
                 </div>
               </Col>
             </Row>
-          </>
-        )}
 
-        {playingTrack && (
-          <div
-            className="mt-2 d-flex align-items-center"
-            style={{
-              padding: "10px",
-              borderRadius: "8px",
-            }}
-          >
-            <img
-              src={playingTrack.albumUrl}
-              alt="Album Art"
-              className="album-art"
-              style={{
-                height: "48px",
-                width: "48px",
-                maxWidth: "20vw",
-                marginRight: "10px",
-                borderRadius: "4px",
-              }}
-            />
-            <div className="playing-info-wrap">
-              <div className="playing-title" title={playingTrack.title}>
-                {playingTrack.title}
+            {playingTrack && (
+              <div
+                className="mt-2 d-flex align-items-center"
+                style={{
+                  padding: "10px",
+                  borderRadius: "8px",
+                }}
+              >
+                <img
+                  src={playingTrack.albumUrl}
+                  alt="Album Art"
+                  className="album-art"
+                  style={{
+                    height: "70px",
+                    width: "70px",
+                    maxWidth: "40vw",
+                    marginRight: "10px",
+                    borderRadius: "4px",
+                  }}
+                />
+                <div className="playing-info-wrap">
+                  <div className="playing-title" title={playingTrack.title}>
+                    {playingTrack.title}
+                  </div>
+                  <div className="playing-artist" title={playingTrack.artist}>
+                    {playingTrack.artist}
+                  </div>
+                </div>
               </div>
-              <div className="playing-artist" title={playingTrack.artist}>
-                {playingTrack.artist}
-              </div>
-            </div>
-          </div>
+            )}
+          </>
         )}
       </Container>
       {/* Confetti canvas */}
