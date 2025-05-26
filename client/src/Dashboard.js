@@ -481,7 +481,7 @@ export default function Dashboard() {
         <div
           style={{
             position: "fixed",
-            top: "30px",
+            top: "70px",
             left: "50%",
             transform: "translateX(-50%)",
             background: "#28a745",
@@ -531,7 +531,7 @@ export default function Dashboard() {
                   fontWeight: "bold",
                   fontFamily: "'Inter', 'Segoe UI', Arial, sans-serif",
                   color: "#FFF5E1",
-                  fontSize: "1.1em",
+                  fontSize: "1.3em",
                 }}
               >
                 {userData.points}
