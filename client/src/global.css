@@ -229,8 +229,8 @@ h1 {
     position: relative;
     display: flex;
     flex-direction: column; 
-    min-height: 52vh;
-    max-height: 52vh;
+    min-height: 50vh;
+    max-height: 50vh;
     overflow: hidden;
   }
   .scrollable-list {
@@ -250,6 +250,37 @@ h1 {
     font-size: 1.05em;
   }
 }
+
+.vote-bar-container {
+  position: relative;
+  width: 20%;
+  height: 40px;
+  background-color: #DC3545;
+  border-radius: 15px;
+  overflow: hidden;
+  cursor: pointer;
+  margin: 10px 0;
+}
+
+.vote-bar-fill {
+  position: absolute;
+  height: 100%;
+  background: #159c43;
+  transition: width 0.4s ease;
+}
+
+.vote-bar-text {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: white;
+  pointer-events: none;
+}
+
 
 @media (min-width: 768px) {
   .playing-info-wrap {
@@ -309,27 +340,7 @@ h1 {
     display: none !important;
   }
 }
-.modern-vote-btn {
-  background: linear-gradient(90deg, #1db954 0%, #159c43 100%);
-  color: #fff !important;
-  border: none;
-  border-radius: 10px;
-  font-weight: 600;
-  font-size: 1em;
-  padding: 6px 20px;
-  box-shadow: 0 2px 8px rgba(30,30,30,0.10);
-  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
-  letter-spacing: 0.02em;
-  outline: none;
-  margin-right: 5px;
-}
 
-.modern-vote-btn:hover, .modern-vote-btn:focus {
-  background: linear-gradient(90deg, #21e065 0%, #159c43 100%);
-  color: #fff;
-  box-shadow: 0 4px 16px rgba(30,30,30,0.18);
-  transform: translateY(-2px) scale(1.04);
-}
 .spotify-login-btn {
   width: 351.2px !important;
   max-width: 100%;
@@ -339,7 +350,15 @@ h1 {
 .btn-outline-success {
   margin-right: 20px;
   font-weight: bold;
+  background-color: #159c43;
+
 }
+.btn-outline-success:hover {
+  background-color: #0e7630;
+}
+
+
+
 
 .now-playing-bar {
   position: fixed;
@@ -402,31 +421,3 @@ h1 {
   letter-spacing: 0.01em;
 }
 
-@media (max-width: 767.98px) {
-  .vote-btn,
-  .modern-vote-btn {
-    background: linear-gradient(90deg, #1db954 0%, #159c43 100%);
-    color: #fff !important;
-    border: none;
-    border-radius: 999px;
-    font-weight: 600;
-    font-size: 1em !important;
-    padding: 6px 20px !important;
-    box-shadow: 0 2px 8px rgba(30,30,30,0.10);
-    transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
-    letter-spacing: 0.02em;
-    outline: none;
-    margin-left: 8px;
-    margin-right: 0;
-    min-width: 80px;
-  }
-  .vote-btn:hover,
-  .modern-vote-btn:hover,
-  .vote-btn:focus,
-  .modern-vote-btn:focus {
-    background: linear-gradient(90deg, #21e065 0%, #159c43 100%);
-    color: #fff;
-    box-shadow: 0 4px 16px rgba(30,30,30,0.18);
-    transform: translateY(-2px) scale(1.04);
-  }
-}

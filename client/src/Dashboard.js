@@ -258,14 +258,21 @@ export default function Dashboard() {
       return;
     }
 
+   if (userData.points >= 5) {
     await updateDoc(userRef, { points: increment(-5) });
+
     await updateDoc(songRef, {
       [`votedUsers.${userId}`]: true,
       votes: increment(1),
     });
+  } else {
+    alert("Not enough points to vote");
+    return;
+  }
 
     const updatedSongSnap = await getDoc(songRef);
     const updatedSong = updatedSongSnap.data();
+
 
     if (updatedSong.votes >= 4) {
       try {
@@ -453,6 +460,21 @@ export default function Dashboard() {
     }
   }
 
+  function VoteBar({ track, voteForSong }) {
+  const votePercentage = Math.min((track.votes / 4) * 100, 100);
+
+  return (
+  <div className="vote-bar-container" onClick={() => voteForSong(track.id)}>
+    <div
+      className="vote-bar-fill"
+      style={{ width: `${votePercentage}%` }}
+    ></div>
+    <div className="vote-bar-text">Vote</div>
+  </div>
+);
+}
+
+
   return (
     <>
       {showPromotionMessage && (
@@ -542,9 +564,9 @@ export default function Dashboard() {
                 <Button
                   variant="outline-success"
                   onClick={() => requestSong(track)}
+                  style={{ color: 'white' }}
                 >
                   Request
-
                 </Button>
               </div>
             ))}
@@ -667,13 +689,7 @@ export default function Dashboard() {
                                   chooseTrack={chooseTrack}
                                 />
                               </div>
-                              <Button
-                                className="vote-btn modern-vote-btn"
-                                variant="btn btn-success"
-                                onClick={() => voteForSong(track.id)}
-                              >
-                                Vote ({track.votes})
-                              </Button>
+                              <VoteBar track={track} voteForSong={voteForSong} />
                             </div>
                           ))}
                         </div>
@@ -776,13 +792,7 @@ export default function Dashboard() {
                                 chooseTrack={chooseTrack}
                               />
                             </div>
-                            <Button
-                              className="vote-btn"
-                              variant="btn btn-success"
-                              onClick={() => voteForSong(track.id)}
-                            >
-                              Vote ({track.votes})
-                            </Button>
+                            <VoteBar track={track} voteForSong={voteForSong} />
                           </div>
                         ))}
                       </div>
