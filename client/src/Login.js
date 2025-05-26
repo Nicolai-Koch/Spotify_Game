@@ -66,8 +66,8 @@ export default function Login({ onSpotifyLogin }) {
       <div
         className="mb-5 text-center"
         style={{
-          position: "absolute", 
-          top: "20px", 
+          position: "absolute",
+          top: "20px",
         }}
       >
         <h1 className="display-4 d-none d-md-block">Spotify Game</h1>
@@ -139,7 +139,7 @@ export default function Login({ onSpotifyLogin }) {
         </div>
       ) : (
         <div className="w-100" style={{ maxWidth: "400px" }}>
-          <div className="mb-4 shadow p-4 rounded text-center custom-shape"> 
+          <div className="mb-4 shadow p-4 rounded text-center custom-shape">
             <h3>Welcome, {user.email.split("@")[0]}</h3>
             <p>You are now logged in!</p>
             <button
@@ -153,15 +153,18 @@ export default function Login({ onSpotifyLogin }) {
       )}
 
       {/* Login with Spotify */}
-      <div className="w-100 mt-2 d-flex justify-content-center" style={{ maxWidth: "400px" }}>
+      <div
+        className="w-100 mt-2 d-flex justify-content-center"
+        style={{ maxWidth: "400px" }}
+      >
         <OverlayTrigger
           placement="bottom" // Tooltip position
           overlay={
             !user ? ( // Render the tooltip only when the button is disabled
-              <Tooltip id="spotify-tooltip">
-                Login or sign up first
-              </Tooltip>
-            ) : <></> // Render nothing when the tooltip is not needed
+              <Tooltip id="spotify-tooltip">Login or sign up first</Tooltip>
+            ) : (
+              <></>
+            ) // Render nothing when the tooltip is not needed
           }
         >
           <span>
