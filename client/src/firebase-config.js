@@ -5,13 +5,13 @@ import { getAuth } from "firebase/auth";
 
 // Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBzkDJ9NgMqNuVpv0Omj7kHUP4RhDl6J1k",
-  authDomain: "spotify1-73e07.firebaseapp.com",
-  projectId: "spotify1-73e07",
-  storageBucket: "spotify1-73e07.appspot.com",
-  messagingSenderId: "819343136632",
-  appId: "1:819343136632:web:01e70cc5bb3c7c194d1a8d",
-  measurementId: "G-E69VZJZSDQ",
+  apiKey: "AIzaSyAb3d2luYwkxT_6o1-l4JH2EfHyuwZI7uc",
+  authDomain: "spotifygame-final.firebaseapp.com",
+  projectId: "spotifygame-final",
+  storageBucket: "spotifygame-final.firebasestorage.app",
+  messagingSenderId: "469808083316",
+  appId: "1:469808083316:web:cb3f2be01c1b841eebfc21",
+  measurementId: "G-5783E2LFZ5",
 };
 
 // Initialize Firebase
